@@ -36,7 +36,7 @@ import thelma.integrity.util.ErrorUtil;
 import thelma.integrity.util.FileUtil;
 import thelma.integrity.util.OrderUtil;
 
-public class App extends Application {
+public class DipIntegrityValidator extends Application {
 
   // user interface
   private final Button chooseDipButton = new Button("DIP-Verzeichnis wählen");
@@ -46,7 +46,7 @@ public class App extends Application {
   private static final int TASK_LIST_ITEM_HEIGHT = 26;
   private final Label successMessageLabel = new Label();
   private final Label errorMessageLabel = new Label();
-  private final Image icon = new Image("/icon.jpg");
+  private final Image icon = new Image("/icon.png");
   private final Image logo = new Image("/logo.jpg");
   private final ImageView logoImageView = new ImageView(logo);
   private final Region logoContentSpacer = new Region();
@@ -64,7 +64,7 @@ public class App extends Application {
     bottomSpacer,
     validationProgressBar
   );
-  private final Scene scene = new Scene(rootLayout, 475, 400);
+  private final Scene scene = new Scene(rootLayout, 475, 425);
 
   // integrity check
   private HashForest<SHA512HashValue> expectedHashForrest;

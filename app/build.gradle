@@ -18,7 +18,7 @@ javafx {
 }
 
 application {
-  mainClass = 'thelma.integrity.App'
+  mainClass = 'thelma.integrity.DipIntegrityValidator'
 }
 
 tasks.withType(JavaCompile) {
