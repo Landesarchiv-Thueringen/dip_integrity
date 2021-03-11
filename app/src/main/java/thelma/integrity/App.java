@@ -98,6 +98,7 @@ public class App extends Application {
     controlSpacer.setPrefHeight(20);
     bottomSpacer.setPrefHeight(20);
     validationProgressBar.setPrefWidth(475);
+    validationProgressBar.setVisible(false);
   }
 
   private void initControls(final Stage primaryStage) {
@@ -106,10 +107,11 @@ public class App extends Application {
       successMessageLabel.setVisible(false);
       errorMessageLabel.setVisible(false);
       addSelectDipTask();
+      validationProgressBar.setVisible(false);
       validationProgressBar.setProgress(0);
       final File dipDir = selectDipDir(primaryStage);
       if (dipDir != null) {
-        primaryStage.show();
+        validationProgressBar.setVisible(true);
         if(readIntegrityFile(dipDir) && readFileOrder(dipDir) && readDipFiles(dipDir)) {
           validateDip();
         }
