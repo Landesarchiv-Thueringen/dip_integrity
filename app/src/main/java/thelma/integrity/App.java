@@ -17,6 +17,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -39,6 +40,7 @@ public class App extends Application {
 
   // user interface
   private final Button chooseDipButton = new Button("DIP-Verzeichnis wählen");
+  private final ProgressBar validationProgressBar = new ProgressBar(0);
   private final ObservableList<String> taskList = FXCollections.observableArrayList();
   private final ListView taskListView = new ListView(taskList);
   private static final int TASK_LIST_ITEM_HEIGHT = 26;
@@ -59,7 +61,8 @@ public class App extends Application {
     errorMessageLabel,
     controlSpacer,
     controlLayout,
-    bottomSpacer
+    bottomSpacer,
+    validationProgressBar
   );
   private final Scene scene = new Scene(rootLayout, 475, 400);
 
@@ -94,15 +97,16 @@ public class App extends Application {
     logoContentSpacer.setPrefHeight(30);
     controlSpacer.setPrefHeight(20);
     bottomSpacer.setPrefHeight(20);
+    validationProgressBar.setPrefWidth(475);
   }
 
   private void initControls(final Stage primaryStage) {
-    //chooseDipButton.setDefaultButton(true);
     chooseDipButton.setOnAction(actionEvent ->  {
       taskList.clear();
       successMessageLabel.setVisible(false);
       errorMessageLabel.setVisible(false);
       addSelectDipTask();
+      validationProgressBar.setProgress(0);
       final File dipDir = selectDipDir(primaryStage);
       if (dipDir != null) {
         primaryStage.show();
@@ -246,6 +250,7 @@ public class App extends Application {
         actualdHashForrest.update(fileHash);
         if (currentFile < fileNumber) ++currentFile;
         taskList.set(taskId, getFileReadingMessage(currentFile, fileNumber));
+        validationProgressBar.setProgress(currentFile/fileNumber);
       } catch (NoSuchAlgorithmException e) {
         // clearly a developer error, reraise instead of propagating to ui
         throw new RuntimeException(e);
