@@ -44,6 +44,7 @@ public class App extends Application {
   private static final int TASK_LIST_ITEM_HEIGHT = 26;
   private final Label successMessageLabel = new Label();
   private final Label errorMessageLabel = new Label();
+  private final Image icon = new Image("icon.jpg");
   private final Image logo = new Image("logo.jpg", true);
   private final ImageView logoImageView = new ImageView(logo);
   private final Region logoContentSpacer = new Region();
@@ -74,7 +75,8 @@ public class App extends Application {
   @Override
   public void start(final Stage primaryStage) {
     primaryStage.setTitle("DIP2Go - Integritätsprüfung");
-    primaryStage.getIcons().add(new Image("icon.jpg"));
+    primaryStage.getIcons().add(icon);
+    primaryStage.setResizable(false);
     scene.getStylesheets().add("main.css");
     primaryStage.setScene(scene);
     initLayout();
