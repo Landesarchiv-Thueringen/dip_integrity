@@ -44,8 +44,8 @@ public class App extends Application {
   private static final int TASK_LIST_ITEM_HEIGHT = 26;
   private final Label successMessageLabel = new Label();
   private final Label errorMessageLabel = new Label();
-  private final Image icon = new Image("icon.jpg");
-  private final Image logo = new Image("logo.jpg", true);
+  private final Image icon = new Image("/icon.jpg");
+  private final Image logo = new Image("/logo.jpg");
   private final ImageView logoImageView = new ImageView(logo);
   private final Region logoContentSpacer = new Region();
   private final Region controlSpacer = new Region();
@@ -234,13 +234,18 @@ public class App extends Application {
   }
 
   private boolean readDipFiles(final File dipDir) {
-    taskList.add("4. Lese DIP-Dateien");
-    boolean success = true;
+    final int taskId = taskList.size();
+    final int fileNumber = fileOrder.getIdentifiers().size();
+    int currentFile = 1;
+    taskList.add(getFileReadingMessage(currentFile, fileNumber));
     actualdHashForrest = new HashForest<SHA512HashValue>();
+    boolean success = true;
     for (String fileName : fileOrder.getIdentifiers()) {
       try {
         final SHA512HashValue fileHash = FileUtil.getHash(new File(dipDir, fileName).getAbsolutePath());
         actualdHashForrest.update(fileHash);
+        if (currentFile < fileNumber) ++currentFile;
+        taskList.set(taskId, getFileReadingMessage(currentFile, fileNumber));
       } catch (NoSuchAlgorithmException e) {
         // clearly a developer error, reraise instead of propagating to ui
         throw new RuntimeException(e);
@@ -261,6 +266,10 @@ public class App extends Application {
       }
     }
     return success;
+  }
+
+  private String getFileReadingMessage(final int currentFile, final int fileNumber) {
+    return "4. Lese DIP-Datei " + currentFile + "/" + fileNumber;
   }
 
   private void validateDip() {
