@@ -102,9 +102,7 @@ public class App extends Application {
       errorMessageLabel.setVisible(false);
       addSelectDipTask();
       final File dipDir = selectDipDir(primaryStage);
-      if (dipDir == null) {
-        Platform.exit();
-      } else {
+      if (dipDir != null) {
         primaryStage.show();
         if(readIntegrityFile(dipDir) && readFileOrder(dipDir) && readDipFiles(dipDir)) {
           validateDip();
