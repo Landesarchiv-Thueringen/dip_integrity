@@ -12,12 +12,16 @@ import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.stage.DirectoryChooser;
@@ -34,16 +38,33 @@ import thelma.integrity.util.OrderUtil;
 public class App extends Application {
 
   // user interface
+  private final Button chooseDipButton = new Button("DIP-Verzeichnis wählen");
   private final ObservableList<String> taskList = FXCollections.observableArrayList();
   private final ListView taskListView = new ListView(taskList);
-  private final Label errorLabel = new Label();
+  private static final int TASK_LIST_ITEM_HEIGHT = 26;
+  private final Label successMessageLabel = new Label();
+  private final Label errorMessageLabel = new Label();
   private final Image logo = new Image("logo.jpg", true);
   private final ImageView logoImageView = new ImageView(logo);
   private final Region logoContentSpacer = new Region();
-  private final VBox layout = new VBox(logoImageView, logoContentSpacer, taskListView, errorLabel);
-  private final Scene scene = new Scene(layout, 475, 475);
+  private final Region controlSpacer = new Region();
+  private final Region bottomSpacer = new Region();
+  private final HBox controlLayout = new HBox(chooseDipButton);
+  private final VBox rootLayout = new VBox(
+    logoImageView,
+    logoContentSpacer,
+    taskListView,
+    successMessageLabel,
+    errorMessageLabel,
+    controlSpacer,
+    controlLayout,
+    bottomSpacer
+  );
+  private final Scene scene = new Scene(rootLayout, 475, 400);
 
-  private final HashForest<SHA512HashValue> hf = new HashForest<SHA512HashValue>();
+  // integrity check
+  private HashForest<SHA512HashValue> expectedHashForrest;
+  private HashForest<SHA512HashValue> actualdHashForrest;
   private OrderUtil fileOrder;
 
   public static void main(String[] args) {
@@ -52,26 +73,32 @@ public class App extends Application {
 
   @Override
   public void start(final Stage primaryStage) {
-    primaryStage.setTitle("ThELMA: DIP-Integritätsprüfung");
+    primaryStage.setTitle("DIP2Go - Integritätsprüfung");
+    primaryStage.getIcons().add(new Image("icon.jpg"));
     scene.getStylesheets().add("main.css");
     primaryStage.setScene(scene);
     initLayout();
     initTaskListView();
-    initErrorLabel();
+    initSucessMessage();
+    initErrorMessage();
     final File dipDir = selectDipDir(primaryStage);
     if (dipDir == null) {
       Platform.exit();
     } else {
       primaryStage.show();
       if(readIntegrityFile(dipDir) && readFileOrder(dipDir) && readDipFiles(dipDir)) {
-
+        validateDip();
       }
     }
   }
 
   private void initLayout() {
-    layout.setStyle("-fx-background-color: white;");
-    logoContentSpacer.setPrefHeight(20);
+    rootLayout.setVgrow(controlSpacer, Priority.ALWAYS);
+    rootLayout.setStyle("-fx-background-color: white;");
+    controlLayout.setAlignment(Pos.CENTER);
+    logoContentSpacer.setPrefHeight(30);
+    controlSpacer.setPrefHeight(20);
+    bottomSpacer.setPrefHeight(20);
   }
 
   private void initTaskListView() {
@@ -79,18 +106,29 @@ public class App extends Application {
     taskListView.setMouseTransparent(true);
     taskListView.setFocusTraversable(false);
     // shrink list view to item size
-    taskListView.prefHeightProperty().bind(Bindings.size(taskList).multiply(26));
+    taskListView.prefHeightProperty().bind(Bindings.size(taskList).multiply(TASK_LIST_ITEM_HEIGHT));
   }
 
-  private void initErrorLabel() {
-    errorLabel.setVisible(false);
-    errorLabel.setTextFill(Color.web("#B22222"));
-    errorLabel.setWrapText(true);
+  private void initSucessMessage() {
+    successMessageLabel.setVisible(false);
+    successMessageLabel.setTextFill(Color.web("#2E8B57"));
+    successMessageLabel.setWrapText(true);
   }
 
-  private void showError(final String errorMessage) {
-    errorLabel.setText(errorMessage);
-    errorLabel.setVisible(true);
+  private void showSuccessMessage(final String successMessage) {
+    successMessageLabel.setText(successMessage);
+    successMessageLabel.setVisible(true);
+  }
+
+  private void initErrorMessage() {
+    errorMessageLabel.setVisible(false);
+    errorMessageLabel.setTextFill(Color.web("#B22222"));
+    errorMessageLabel.setWrapText(true);
+  }
+
+  private void showErrorMessage(final String errorMessage) {
+    errorMessageLabel.setText(errorMessage);
+    errorMessageLabel.setVisible(true);
   }
 
   private File selectDipDir(final Stage primaryStage) {
@@ -101,32 +139,45 @@ public class App extends Application {
   }
 
   private boolean readIntegrityFile(final File dipDir) {
-    boolean success = true;
     taskList.add("1. Lese Datei-Integritätsinformationen");
+    boolean success = true;
+    expectedHashForrest = new HashForest<SHA512HashValue>();
     File integrityFile = new File(dipDir, HashForest.INTEGRITYFILENAME);
     if (integrityFile.isFile() && integrityFile.canRead() && integrityFile.length() != 0) {
       try {
-        hf.readFrom(new FileReader(integrityFile));
+        expectedHashForrest.readFrom(new FileReader(integrityFile));
       } catch (FileNotFoundException e) {
-        showError("Die Datei \"" + HashForest.INTEGRITYFILENAME + "\" existiert nicht.");
+        showErrorMessage(ErrorUtil.getFileErrorMessage(
+          HashForest.INTEGRITYFILENAME,
+          ErrorUtil.ErrorType.FILE_NOT_FOUND
+        ));
         success = false;
       } catch (IOException e) {
-        showError("Die Datei \"" + HashForest.INTEGRITYFILENAME + "\" ist nicht lesbar.");
+        showErrorMessage(ErrorUtil.getFileErrorMessage(
+          HashForest.INTEGRITYFILENAME,
+          ErrorUtil.ErrorType.FILE_NOT_READABLE
+        ));
         success = false;
       } catch (InvalidInputException e) {
-        showError("Die Datei \"" + HashForest.INTEGRITYFILENAME + "\" entspricht nicht dem erwarteten Format.");
+        showErrorMessage(ErrorUtil.getFileErrorMessage(
+          HashForest.INTEGRITYFILENAME,
+          ErrorUtil.ErrorType.FILE_FORMAT_INVALID
+        ));
         success = false;
       }
     } else {
       success = false;
-      showError("Die Datei \"" + HashForest.INTEGRITYFILENAME + "\" ist nicht lesbar.");
+      showErrorMessage(ErrorUtil.getFileErrorMessage(
+        HashForest.INTEGRITYFILENAME,
+        ErrorUtil.ErrorType.FILE_NOT_READABLE
+      ));
     }
     return success;
   }
 
   private boolean readFileOrder(final File dipDir) {
-    boolean success = true;
     taskList.add("2. Lese Datei-Ordnungsinformationen");
+    boolean success = true;
     final File orderingFile = new File(dipDir, OrderUtil.ORDERFILENAME);
     if (orderingFile.isFile() && orderingFile.canRead() && orderingFile.length() != 0) {
       try {
@@ -137,39 +188,70 @@ public class App extends Application {
         // clearly a developer error, reraise instead of propagating to ui
         throw new RuntimeException(e);
       } catch (FileNotFoundException e) {
-        showError("Die Datei \"" + OrderUtil.ORDERFILENAME + "\" existiert nicht.");
+        showErrorMessage(ErrorUtil.getFileErrorMessage(
+          OrderUtil.ORDERFILENAME,
+          ErrorUtil.ErrorType.FILE_NOT_FOUND
+        ));
         success = false;
       } catch (IOException e) {
-        showError("Die Datei \"" + OrderUtil.ORDERFILENAME + "\" ist nicht lesbar.");
+        showErrorMessage(ErrorUtil.getFileErrorMessage(
+          OrderUtil.ORDERFILENAME,
+          ErrorUtil.ErrorType.FILE_NOT_READABLE
+        ));
         success = false;
       } catch (InvalidInputException e) {
-        showError("Die Datei \"" + OrderUtil.ORDERFILENAME + "\" entspricht nicht dem erwarteten Format.");
+        showErrorMessage(ErrorUtil.getFileErrorMessage(
+          OrderUtil.ORDERFILENAME,
+          ErrorUtil.ErrorType.FILE_FORMAT_INVALID
+        ));
         success = false;
       }
     } else {
       success = false;
-      showError("Die Datei \"" + OrderUtil.ORDERFILENAME + "\" ist nicht lesbar.");
+      showErrorMessage(ErrorUtil.getFileErrorMessage(
+        OrderUtil.ORDERFILENAME,
+        ErrorUtil.ErrorType.FILE_NOT_READABLE
+      ));
     }
-    return true;
+    return success;
   }
 
   private boolean readDipFiles(final File dipDir) {
-    boolean success = true;
     taskList.add("3. Lese DIP-Dateien");
+    boolean success = true;
+    actualdHashForrest = new HashForest<SHA512HashValue>();
     for (String fileName : fileOrder.getIdentifiers()) {
       try {
         final SHA512HashValue fileHash = FileUtil.getHash(new File(dipDir, fileName).getAbsolutePath());
+        actualdHashForrest.update(fileHash);
       } catch (NoSuchAlgorithmException e) {
         // clearly a developer error, reraise instead of propagating to ui
         throw new RuntimeException(e);
       } catch (FileNotFoundException e) {
-        showError(ErrorUtil.getFileErrorMessage(fileName, ErrorUtil.ErrorType.FILE_NOT_FOUND));
+        showErrorMessage(ErrorUtil.getFileErrorMessage(
+          fileName,
+          ErrorUtil.ErrorType.FILE_NOT_FOUND
+        ));
         success = false;
+        break;
       } catch (IOException e) {
-        showError(ErrorUtil.getFileErrorMessage(fileName, ErrorUtil.ErrorType.FILE_NOT_READABLE));
+        showErrorMessage(ErrorUtil.getFileErrorMessage(
+          fileName,
+          ErrorUtil.ErrorType.FILE_NOT_READABLE
+        ));
         success = false;
+        break;
       }
     }
     return success;
+  }
+
+  private void validateDip() {
+    taskList.add("4. Validiere DIP");
+    if (expectedHashForrest.validate(actualdHashForrest)) {
+      showSuccessMessage("Die DIP-Prüfung ist erfolgreich beendet wurden. Alle DIP-Dateien sind valide.");
+    } else {
+      showErrorMessage("Die DIP-Prüfung ist fehlgeschlagen. Die DIP-Dateien wurden beschädigt oder manipuliert.");
+    }
   }
 }
