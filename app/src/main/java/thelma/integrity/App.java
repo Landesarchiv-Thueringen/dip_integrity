@@ -18,6 +18,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
+import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
@@ -38,7 +39,8 @@ public class App extends Application {
   private final Label errorLabel = new Label();
   private final Image logo = new Image("logo.jpg", true);
   private final ImageView logoImageView = new ImageView(logo);
-  private final VBox layout = new VBox(logoImageView, taskListView, errorLabel);
+  private final Region logoContentSpacer = new Region();
+  private final VBox layout = new VBox(logoImageView, logoContentSpacer, taskListView, errorLabel);
   private final Scene scene = new Scene(layout, 475, 475);
 
   private final HashForest<SHA512HashValue> hf = new HashForest<SHA512HashValue>();
@@ -69,6 +71,7 @@ public class App extends Application {
 
   private void initLayout() {
     layout.setStyle("-fx-background-color: white;");
+    logoContentSpacer.setPrefHeight(20);
   }
 
   private void initTaskListView() {
