@@ -78,18 +78,11 @@ public class App extends Application {
     scene.getStylesheets().add("main.css");
     primaryStage.setScene(scene);
     initLayout();
+    initControls(primaryStage);
     initTaskListView();
-    initSucessMessage();
+    initSuccessMessage();
     initErrorMessage();
-    final File dipDir = selectDipDir(primaryStage);
-    if (dipDir == null) {
-      Platform.exit();
-    } else {
-      primaryStage.show();
-      if(readIntegrityFile(dipDir) && readFileOrder(dipDir) && readDipFiles(dipDir)) {
-        validateDip();
-      }
-    }
+    primaryStage.show();
   }
 
   private void initLayout() {
@@ -101,15 +94,39 @@ public class App extends Application {
     bottomSpacer.setPrefHeight(20);
   }
 
+  private void initControls(final Stage primaryStage) {
+    //chooseDipButton.setDefaultButton(true);
+    chooseDipButton.setOnAction(actionEvent ->  {
+      taskList.clear();
+      successMessageLabel.setVisible(false);
+      errorMessageLabel.setVisible(false);
+      addSelectDipTask();
+      final File dipDir = selectDipDir(primaryStage);
+      if (dipDir == null) {
+        Platform.exit();
+      } else {
+        primaryStage.show();
+        if(readIntegrityFile(dipDir) && readFileOrder(dipDir) && readDipFiles(dipDir)) {
+          validateDip();
+        }
+      }
+    });
+  }
+
   private void initTaskListView() {
     // make list items not selectable
     taskListView.setMouseTransparent(true);
     taskListView.setFocusTraversable(false);
     // shrink list view to item size
     taskListView.prefHeightProperty().bind(Bindings.size(taskList).multiply(TASK_LIST_ITEM_HEIGHT));
+    addSelectDipTask();
   }
 
-  private void initSucessMessage() {
+  private void addSelectDipTask() {
+    taskList.add("1. Bitte wählen Sie das zu prüfende DIP-Verzeichnis aus.");
+  }
+
+  private void initSuccessMessage() {
     successMessageLabel.setVisible(false);
     successMessageLabel.setTextFill(Color.web("#2E8B57"));
     successMessageLabel.setWrapText(true);
@@ -139,7 +156,7 @@ public class App extends Application {
   }
 
   private boolean readIntegrityFile(final File dipDir) {
-    taskList.add("1. Lese Datei-Integritätsinformationen");
+    taskList.add("2. Lese Datei-Integritätsinformationen");
     boolean success = true;
     expectedHashForrest = new HashForest<SHA512HashValue>();
     File integrityFile = new File(dipDir, HashForest.INTEGRITYFILENAME);
@@ -176,7 +193,7 @@ public class App extends Application {
   }
 
   private boolean readFileOrder(final File dipDir) {
-    taskList.add("2. Lese Datei-Ordnungsinformationen");
+    taskList.add("3. Lese Datei-Ordnungsinformationen");
     boolean success = true;
     final File orderingFile = new File(dipDir, OrderUtil.ORDERFILENAME);
     if (orderingFile.isFile() && orderingFile.canRead() && orderingFile.length() != 0) {
@@ -217,7 +234,7 @@ public class App extends Application {
   }
 
   private boolean readDipFiles(final File dipDir) {
-    taskList.add("3. Lese DIP-Dateien");
+    taskList.add("4. Lese DIP-Dateien");
     boolean success = true;
     actualdHashForrest = new HashForest<SHA512HashValue>();
     for (String fileName : fileOrder.getIdentifiers()) {
@@ -247,7 +264,7 @@ public class App extends Application {
   }
 
   private void validateDip() {
-    taskList.add("4. Validiere DIP");
+    taskList.add("5. Validiere DIP");
     if (expectedHashForrest.validate(actualdHashForrest)) {
       showSuccessMessage("Die DIP-Prüfung ist erfolgreich beendet wurden. Alle DIP-Dateien sind valide.");
     } else {
