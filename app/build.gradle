@@ -1,6 +1,7 @@
 plugins {
   id 'application'
   id 'org.openjfx.javafxplugin' version '0.0.9'
+  id 'com.github.johnrengelman.shadow' version '6.1.0'
 }
 
 repositories {
@@ -10,23 +11,23 @@ repositories {
 dependencies {
   testImplementation 'junit:junit:4.13'
   implementation 'com.google.guava:guava:29.0-jre'
+  compile group: 'org.openjfx', name: 'javafx-controls', version: '15.0.1'
 }
 
 javafx {
-    version = '15.0.1'
-    modules = [ 'javafx.controls' ]
+  version = '15.0.1'
+  modules = [ 'javafx.controls' ]
 }
 
 application {
-  mainClass = 'lath.integrity.DipIntegrityValidator'
+  mainClass = 'lath.integrity.App'
 }
 
 tasks.withType(JavaCompile) {
   options.encoding = 'UTF-8'
 }
 
-jar {
-  manifest {
-    attributes 'Main-Class': 'lath.integrity.DipIntegrityValidator'
-  }
+shadowJar {
+  mainClassName = 'lath.integrity.App'
+  archiveName  = 'DIP2GO_Integritaetspruefung.jar'
 }

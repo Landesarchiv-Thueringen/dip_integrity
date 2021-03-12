@@ -1,4 +1,4 @@
-package lath.integrity;
+package lath.integrity.ui;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -30,8 +30,6 @@ import javafx.stage.Stage;
 import lath.integrity.error.InvalidInputException;
 import lath.integrity.hashforest.HashForest;
 import lath.integrity.hashforest.SHA512HashValue;
-import lath.integrity.ui.Task;
-import lath.integrity.ui.TaskCellFactory;
 import lath.integrity.util.ChecksumUtil;
 import lath.integrity.util.ErrorUtil;
 import lath.integrity.util.FileUtil;
