@@ -45,8 +45,8 @@ public class HashForest<T extends HashValue> implements TextSerializable {
     }
   }
 
-  private static final long serialVersionUID = 4159661696848135993L;
-
+  private final static long serialVersionUID = 4159661696848135993L;
+  public final static Charset CHARSET = Charset.forName("UTF-8");
   public final static String INTEGRITYFILENAME = "integritycomponent-integrity.txt";
 
   private int version = 1;
@@ -316,8 +316,8 @@ public class HashForest<T extends HashValue> implements TextSerializable {
   }
 
   private void updateChecksum(ChecksumUtil cp, String field, String value) {
-    cp.update(field.getBytes(Charset.forName("UTF-8")));
-    cp.update(value.getBytes(Charset.forName("UTF-8")));
+    cp.update(field.getBytes(CHARSET));
+    cp.update(value.getBytes(CHARSET));
   }
 
   private void writeChecked(Writer w, ChecksumUtil cp, String field, String value) throws IOException {

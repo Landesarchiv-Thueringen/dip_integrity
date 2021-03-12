@@ -27,9 +27,10 @@ public class OrderUtil implements TextSerializable {
 
   private static final long serialVersionUID = -5033306062362219759L;
   public final static String ORDERFILENAME = "integritycomponent-order.txt";
-  private final static Charset CHARSET = Charset.forName("UTF-8");
+  public final static Charset CHARSET = Charset.forName("UTF-8");
   private final static int BUFSIZE = 1024;
   private final static String LINESEPARATOR = "\n";
+
   private List<String> identifiers = new ArrayList<String>();
   private boolean isValid = true;
   private ChecksumUtil checksumUtil;

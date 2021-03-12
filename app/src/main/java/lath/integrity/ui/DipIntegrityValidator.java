@@ -40,19 +40,20 @@ public class DipIntegrityValidator extends Application {
   // user interface
   private final Button chooseDipButton = new Button("DIP-Verzeichnis wählen");
   private final ObservableList<Task> taskList = FXCollections.observableArrayList();
-  private final ListView taskListView = new ListView(taskList);
+  private final ListView<Task> taskListView = new ListView<Task>(taskList);
   private static final int TASK_LIST_ITEM_HEIGHT = 45;
   private final Label successMessageLabel = new Label();
   private final Label errorMessageLabel = new Label();
   private final Image icon = new Image("/icon.png");
   private final Image logo = new Image("/logo.jpg");
   private final ImageView logoImageView = new ImageView(logo);
+  private final HBox logoLayout = new HBox(logoImageView);
   private final Region logoContentSpacer = new Region();
   private final Region controlSpacer = new Region();
   private final Region bottomSpacer = new Region();
   private final HBox controlLayout = new HBox(chooseDipButton);
   private final VBox rootLayout = new VBox(
-    logoImageView,
+    logoLayout,
     logoContentSpacer,
     taskListView,
     successMessageLabel,
@@ -90,6 +91,7 @@ public class DipIntegrityValidator extends Application {
   private void initLayout() {
     rootLayout.setVgrow(controlSpacer, Priority.ALWAYS);
     rootLayout.setStyle("-fx-background-color: white;");
+    logoLayout.setAlignment(Pos.CENTER);
     controlLayout.setAlignment(Pos.CENTER);
     logoContentSpacer.setPrefHeight(30);
     controlSpacer.setPrefHeight(20);
@@ -163,7 +165,7 @@ public class DipIntegrityValidator extends Application {
     File integrityFile = new File(dipDir, HashForest.INTEGRITYFILENAME);
     if (integrityFile.isFile() && integrityFile.canRead() && integrityFile.length() != 0) {
       try {
-        expectedHashForrest.readFrom(new FileReader(integrityFile));
+        expectedHashForrest.readFrom(new FileReader(integrityFile, HashForest.CHARSET));
       } catch (FileNotFoundException e) {
         showErrorMessage(ErrorUtil.getFileErrorMessage(
           HashForest.INTEGRITYFILENAME,
@@ -203,7 +205,7 @@ public class DipIntegrityValidator extends Application {
       try {
         final ChecksumUtil checksumProvider = new ChecksumUtil(MessageDigest.getInstance("SHA-512"));
         fileOrder = new OrderUtil(checksumProvider);
-        fileOrder.readFrom(new FileReader(orderingFile));
+        fileOrder.readFrom(new FileReader(orderingFile, OrderUtil.CHARSET));
       } catch (NoSuchAlgorithmException e) {
         // clearly a developer error, reraise instead of propagating to ui
         throw new RuntimeException(e);
