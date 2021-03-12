@@ -1,4 +1,4 @@
-package thelma.integrity.util;
+package lath.integrity.util;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,7 +11,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import thelma.integrity.error.InvalidInputException;
+import lath.integrity.error.InvalidInputException;
 
 /**
  * Helper class to maintain the order of the data whose integrity was computed

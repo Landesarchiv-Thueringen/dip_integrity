@@ -4,7 +4,7 @@
 }
 .list-view .list-cell {
   -fx-background-color: white;
-  -fx-padding : 0 2em 0 2em;
+  -fx-padding : 0 2em 0 0;
 
 }
 .label {

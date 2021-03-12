@@ -1,4 +1,4 @@
-package thelma.integrity.error;
+package lath.integrity.error;
 
 public class InvalidInputException extends Exception {
 

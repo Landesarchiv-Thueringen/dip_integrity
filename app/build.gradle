@@ -18,9 +18,15 @@ javafx {
 }
 
 application {
-  mainClass = 'thelma.integrity.DipIntegrityValidator'
+  mainClass = 'lath.integrity.DipIntegrityValidator'
 }
 
 tasks.withType(JavaCompile) {
   options.encoding = 'UTF-8'
+}
+
+jar {
+  manifest {
+    attributes 'Main-Class': 'lath.integrity.DipIntegrityValidator'
+  }
 }

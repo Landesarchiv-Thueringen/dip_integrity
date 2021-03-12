@@ -1,8 +1,8 @@
-package thelma.integrity.util;
+package lath.integrity.util;
 
 import java.security.MessageDigest;
 
-import thelma.integrity.hashforest.HashValue;
+import lath.integrity.hashforest.HashValue;
 
 public class ChecksumUtil {
 

@@ -1,4 +1,4 @@
-package thelma.integrity.util;
+package lath.integrity.util;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -8,7 +8,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
-import thelma.integrity.hashforest.SHA512HashValue;
+import lath.integrity.hashforest.SHA512HashValue;
 
 /**
  * Helper class for file hashing.

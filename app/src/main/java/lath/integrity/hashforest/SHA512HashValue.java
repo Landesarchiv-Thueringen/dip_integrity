@@ -1,4 +1,4 @@
-package thelma.integrity.hashforest;
+package lath.integrity.hashforest;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

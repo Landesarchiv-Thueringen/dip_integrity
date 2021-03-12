@@ -1,4 +1,4 @@
-package thelma.integrity;
+package lath.integrity;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -17,7 +17,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -28,22 +27,23 @@ import javafx.scene.paint.Color;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 
-import thelma.integrity.error.InvalidInputException;
-import thelma.integrity.hashforest.HashForest;
-import thelma.integrity.hashforest.SHA512HashValue;
-import thelma.integrity.util.ChecksumUtil;
-import thelma.integrity.util.ErrorUtil;
-import thelma.integrity.util.FileUtil;
-import thelma.integrity.util.OrderUtil;
+import lath.integrity.error.InvalidInputException;
+import lath.integrity.hashforest.HashForest;
+import lath.integrity.hashforest.SHA512HashValue;
+import lath.integrity.ui.Task;
+import lath.integrity.ui.TaskCellFactory;
+import lath.integrity.util.ChecksumUtil;
+import lath.integrity.util.ErrorUtil;
+import lath.integrity.util.FileUtil;
+import lath.integrity.util.OrderUtil;
 
 public class DipIntegrityValidator extends Application {
 
   // user interface
   private final Button chooseDipButton = new Button("DIP-Verzeichnis wählen");
-  private final ProgressBar validationProgressBar = new ProgressBar(0);
-  private final ObservableList<String> taskList = FXCollections.observableArrayList();
+  private final ObservableList<Task> taskList = FXCollections.observableArrayList();
   private final ListView taskListView = new ListView(taskList);
-  private static final int TASK_LIST_ITEM_HEIGHT = 26;
+  private static final int TASK_LIST_ITEM_HEIGHT = 45;
   private final Label successMessageLabel = new Label();
   private final Label errorMessageLabel = new Label();
   private final Image icon = new Image("/icon.png");
@@ -61,10 +61,9 @@ public class DipIntegrityValidator extends Application {
     errorMessageLabel,
     controlSpacer,
     controlLayout,
-    bottomSpacer,
-    validationProgressBar
+    bottomSpacer
   );
-  private final Scene scene = new Scene(rootLayout, 475, 425);
+  private final Scene scene = new Scene(rootLayout, 475, 500);
 
   // integrity check
   private HashForest<SHA512HashValue> expectedHashForrest;
@@ -97,8 +96,6 @@ public class DipIntegrityValidator extends Application {
     logoContentSpacer.setPrefHeight(30);
     controlSpacer.setPrefHeight(20);
     bottomSpacer.setPrefHeight(20);
-    validationProgressBar.setPrefWidth(475);
-    validationProgressBar.setVisible(false);
   }
 
   private void initControls(final Stage primaryStage) {
@@ -107,11 +104,9 @@ public class DipIntegrityValidator extends Application {
       successMessageLabel.setVisible(false);
       errorMessageLabel.setVisible(false);
       addSelectDipTask();
-      validationProgressBar.setVisible(false);
-      validationProgressBar.setProgress(0);
       final File dipDir = selectDipDir(primaryStage);
       if (dipDir != null) {
-        validationProgressBar.setVisible(true);
+        taskList.get(0).progress = 1.0;
         if(readIntegrityFile(dipDir) && readFileOrder(dipDir) && readDipFiles(dipDir)) {
           validateDip();
         }
@@ -120,6 +115,7 @@ public class DipIntegrityValidator extends Application {
   }
 
   private void initTaskListView() {
+    taskListView.setCellFactory(new TaskCellFactory());
     // make list items not selectable
     taskListView.setMouseTransparent(true);
     taskListView.setFocusTraversable(false);
@@ -129,7 +125,7 @@ public class DipIntegrityValidator extends Application {
   }
 
   private void addSelectDipTask() {
-    taskList.add("1. Bitte wählen Sie das zu prüfende DIP-Verzeichnis aus.");
+    taskList.add(new Task("1. Bitte wählen Sie das zu prüfende DIP-Verzeichnis aus."));
   }
 
   private void initSuccessMessage() {
@@ -162,7 +158,8 @@ public class DipIntegrityValidator extends Application {
   }
 
   private boolean readIntegrityFile(final File dipDir) {
-    taskList.add("2. Lese Datei-Integritätsinformationen");
+    final int taskId = taskList.size();
+    taskList.add(new Task("2. Lese Datei-Integritätsinformationen"));
     boolean success = true;
     expectedHashForrest = new HashForest<SHA512HashValue>();
     File integrityFile = new File(dipDir, HashForest.INTEGRITYFILENAME);
@@ -195,11 +192,13 @@ public class DipIntegrityValidator extends Application {
         ErrorUtil.ErrorType.FILE_NOT_READABLE
       ));
     }
+    taskList.get(taskId).progress = 1.0;
     return success;
   }
 
   private boolean readFileOrder(final File dipDir) {
-    taskList.add("3. Lese Datei-Ordnungsinformationen");
+    final int taskId = taskList.size();
+    taskList.add(new Task("3. Lese Datei-Ordnungsinformationen"));
     boolean success = true;
     final File orderingFile = new File(dipDir, OrderUtil.ORDERFILENAME);
     if (orderingFile.isFile() && orderingFile.canRead() && orderingFile.length() != 0) {
@@ -236,14 +235,16 @@ public class DipIntegrityValidator extends Application {
         ErrorUtil.ErrorType.FILE_NOT_READABLE
       ));
     }
+    taskList.get(taskId).progress = 1.0;
     return success;
   }
 
   private boolean readDipFiles(final File dipDir) {
-    final int taskId = taskList.size();
     final int fileNumber = fileOrder.getIdentifiers().size();
     int currentFile = 1;
-    taskList.add(getFileReadingMessage(currentFile, fileNumber));
+    final int taskId = taskList.size();
+    taskList.add(new Task(getFileReadingMessage(currentFile, fileNumber)));
+    final Task task = taskList.get(taskId);
     actualdHashForrest = new HashForest<SHA512HashValue>();
     boolean success = true;
     for (String fileName : fileOrder.getIdentifiers()) {
@@ -251,8 +252,8 @@ public class DipIntegrityValidator extends Application {
         final SHA512HashValue fileHash = FileUtil.getHash(new File(dipDir, fileName).getAbsolutePath());
         actualdHashForrest.update(fileHash);
         if (currentFile < fileNumber) ++currentFile;
-        taskList.set(taskId, getFileReadingMessage(currentFile, fileNumber));
-        validationProgressBar.setProgress(currentFile/fileNumber);
+        task.description = getFileReadingMessage(currentFile, fileNumber);
+        task.progress = currentFile / fileNumber;
       } catch (NoSuchAlgorithmException e) {
         // clearly a developer error, reraise instead of propagating to ui
         throw new RuntimeException(e);
@@ -280,11 +281,13 @@ public class DipIntegrityValidator extends Application {
   }
 
   private void validateDip() {
-    taskList.add("5. Validiere DIP");
+    final int taskId = taskList.size();
+    taskList.add(new Task("5. Validiere DIP"));
     if (expectedHashForrest.validate(actualdHashForrest)) {
       showSuccessMessage("Die DIP-Prüfung ist erfolgreich beendet wurden. Alle DIP-Dateien sind valide.");
     } else {
       showErrorMessage("Die DIP-Prüfung ist fehlgeschlagen. Die DIP-Dateien wurden beschädigt oder manipuliert.");
     }
+    taskList.get(taskId).progress = 1.0;
   }
 }

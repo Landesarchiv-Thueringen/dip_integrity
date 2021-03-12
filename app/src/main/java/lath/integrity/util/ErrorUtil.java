@@ -1,4 +1,4 @@
-package thelma.integrity.util;
+package lath.integrity.util;
 
 public class ErrorUtil {
 

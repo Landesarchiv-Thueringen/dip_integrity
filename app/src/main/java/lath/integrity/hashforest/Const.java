@@ -1,4 +1,4 @@
-package thelma.integrity.hashforest;
+package lath.integrity.hashforest;
 
 public class Const {
 
