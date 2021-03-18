@@ -8,4 +8,4 @@
  */
 
 rootProject.name = 'lath_integrity_audit'
-include 'dip_integrity_lib','dip_integrity_check'
+include 'dip_integrity_lib','dip_integrity_generation', 'dip_integrity_check'
