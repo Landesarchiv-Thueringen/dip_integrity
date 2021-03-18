@@ -11,6 +11,7 @@ repositories {
 dependencies {
   testImplementation 'junit:junit:4.13'
   implementation 'com.google.guava:guava:29.0-jre'
+  implementation project(':dip_integrity_lib');
 }
 
 javafx {
@@ -24,7 +25,7 @@ application {
 
 shadowJar {
   mainClassName = 'lath.integrity.App'
-  archiveFileName  = 'DIP2GO_Integritaetspruefung.jar'
+  archiveBaseName  = 'DIP2GO_Integritaetspruefung'
 }
 
 tasks.withType(JavaCompile) {
