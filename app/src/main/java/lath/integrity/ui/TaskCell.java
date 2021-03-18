@@ -7,10 +7,6 @@ import javafx.scene.control.Label;
 
 public class TaskCell extends ListCell<Task> {
 
-  private final Label descriptionLabel = new Label();
-  private final ProgressIndicator progressIndicator = new ProgressIndicator();
-  private final BorderPane layout = new BorderPane();
-
   @Override
   public void updateItem(final Task task, final boolean empty) {
     super.updateItem(task, empty);
@@ -19,8 +15,15 @@ public class TaskCell extends ListCell<Task> {
       setGraphic(null);
     } else {
       setText(null);
-      descriptionLabel.setText(task.description);
-      progressIndicator.setProgress(task.progress);
+      final Label descriptionLabel = new Label(task.description);
+      final ProgressIndicator progressIndicator = new ProgressIndicator();
+      if (!task.indefinite || task.progress > 0.0) {
+        progressIndicator.setPrefHeight(40);
+        progressIndicator.setProgress(task.progress);
+      } else {
+        progressIndicator.setPrefHeight(20);
+      }
+      final BorderPane layout = new BorderPane();
       layout.setLeft(descriptionLabel);
       layout.setRight(progressIndicator);
       setGraphic(layout);

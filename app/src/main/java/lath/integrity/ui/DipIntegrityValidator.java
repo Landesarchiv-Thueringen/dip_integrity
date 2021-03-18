@@ -41,7 +41,7 @@ public class DipIntegrityValidator extends Application {
   private final Button chooseDipButton = new Button("Verzeichnis wählen");
   private final ObservableList<Task> taskList = FXCollections.observableArrayList();
   private final ListView<Task> taskListView = new ListView<Task>(taskList);
-  private static final int TASK_LIST_ITEM_HEIGHT = 45;
+  private static final int TASK_LIST_ITEM_HEIGHT = 50;
   private final Label successMessageLabel = new Label();
   private final Label errorMessageLabel = new Label();
   private final Image icon = new Image("/icon.png");
@@ -62,7 +62,7 @@ public class DipIntegrityValidator extends Application {
     controlLayout,
     bottomSpacer
   );
-  private final Scene scene = new Scene(rootLayout, 475, 500);
+  private final Scene scene = new Scene(rootLayout, 500, 550);
 
   // integrity check
   private HashForest<SHA512HashValue> expectedHashForrest;
@@ -131,6 +131,7 @@ public class DipIntegrityValidator extends Application {
   private void initSuccessMessage() {
     successMessageLabel.setVisible(false);
     successMessageLabel.setTextFill(Color.web("#2E8B57"));
+    successMessageLabel.setStyle("-fx-font-weight: bold;");
     successMessageLabel.setWrapText(true);
   }
 
@@ -142,6 +143,7 @@ public class DipIntegrityValidator extends Application {
   private void initErrorMessage() {
     errorMessageLabel.setVisible(false);
     errorMessageLabel.setTextFill(Color.web("#B22222"));
+    errorMessageLabel.setStyle("-fx-font-weight: bold;");
     errorMessageLabel.setWrapText(true);
   }
 
@@ -235,7 +237,9 @@ public class DipIntegrityValidator extends Application {
         ErrorUtil.ErrorType.FILE_NOT_READABLE
       ));
     }
-    taskList.get(taskId).progress = 1.0;
+    for (final Task task : taskList) {
+      task.progress = 1.0;
+    }
     return success;
   }
 
@@ -243,7 +247,7 @@ public class DipIntegrityValidator extends Application {
     final int fileNumber = fileOrder.getIdentifiers().size();
     int currentFile = 1;
     final int taskId = taskList.size();
-    taskList.add(new Task(getFileReadingMessage(currentFile, fileNumber)));
+    taskList.add(new Task(getFileReadingMessage(currentFile, fileNumber), false));
     final Task task = taskList.get(taskId);
     actualdHashForrest = new HashForest<SHA512HashValue>();
     boolean success = true;
