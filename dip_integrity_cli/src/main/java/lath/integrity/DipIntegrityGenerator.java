@@ -1,7 +1,9 @@
 package lath.integrity;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
@@ -23,9 +25,11 @@ import org.apache.commons.cli.OptionGroup;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
+import lath.integrity.error.InvalidInputException;
 import lath.integrity.hashforest.HashForest;
 import lath.integrity.hashforest.SHA512HashValue;
 import lath.integrity.util.ChecksumUtil;
+import lath.integrity.util.ErrorUtil;
 import lath.integrity.util.FileUtil;
 import lath.integrity.util.OrderUtil;
 
@@ -55,6 +59,8 @@ public class DipIntegrityGenerator {
 
 
   private static OrderUtil fileOrder;
+  private static HashForest<SHA512HashValue> expectedHashForrest;
+  private static HashForest<SHA512HashValue> actualdHashForrest;
 
   private static void createIntegrityInformation(final Path dipDir, final boolean fullHashTree) {
     final Path orderFilePath = Paths.get(dipDir.toString(), OrderUtil.ORDERFILENAME);
@@ -63,7 +69,7 @@ public class DipIntegrityGenerator {
       Files.deleteIfExists(orderFilePath);
       Files.deleteIfExists(integrityFilePath);
     } catch (final IOException e) {
-      System.out.println("error deleting old integrity information files");
+      System.out.println("Es gab einen Fehler beim Löschen veralteter Integritätsinformationen.");
       System.out.println(e.getMessage());
       System.exit(1);
     }
@@ -73,7 +79,7 @@ public class DipIntegrityGenerator {
     printIntegrityFileCreationSuccessMessage(
       dipDir,
       fileOrder.getIdentifiers().size(),
-      fullHashTree ? HashForest.Mode.FULL : HashForest.Mode.ROOTS,
+      fullHashTree,
       integrityFilePath,
       orderFilePath
     );
@@ -98,7 +104,7 @@ public class DipIntegrityGenerator {
       // clearly a developer error, reraise instead of propagating
       throw new RuntimeException(e);
     } catch (IOException e) {
-      System.out.println("error writing order file");
+      System.out.println("Beim schreiben der Ordnungsinformationen kam es zu einem Fehler.");
       System.out.println(e.getMessage());
       System.exit(1);
     }
@@ -128,7 +134,7 @@ public class DipIntegrityGenerator {
       // clearly a developer error, reraise instead of propagating
       throw new RuntimeException(e);
     } catch (IOException e) {
-      System.out.println("error writing integrity file");
+      System.out.println("Beim schreiben der Integritätsinformationen kam es zu einem Fehler.");
       System.out.println(e.getMessage());
       System.exit(1);
     }
@@ -137,38 +143,161 @@ public class DipIntegrityGenerator {
   private static void printIntegrityFileCreationSuccessMessage(
     final Path dipDir,
     final int fileNumber,
-    final HashForest.Mode mode,
+    final boolean fullHashTree,
     final Path integrityFilePath,
     final Path orderFilePath
   ) {
     final StringBuilder statusMessage = new StringBuilder(500);
-    statusMessage.append("\n");
-    statusMessage.append("Created integrity information for ");
+    statusMessage.append("\nDie Integritätsinformationen für das Nutzungspaket \"");
     statusMessage.append(dipDir);
-    statusMessage.append("\n");
-    statusMessage.append("Files: ");
+    statusMessage.append("\" wurden erfolgreich erstellt.\n\n");
     statusMessage.append(fileNumber);
-    statusMessage.append("\n");
-    statusMessage.append("Mode: ");
-    statusMessage.append(mode.toString());
-    statusMessage.append("\n");
-    statusMessage.append("Integrity information written to: ");
+    statusMessage.append(" Dateien wurden für die Erstellung der Integritätsinformationen berücksichtigt.\n");
+    if (fullHashTree) {
+      statusMessage.append("\nIn die Integritätsdatei wurde der komplette Hash-Forest geschrieben.\n");
+    } else {
+      statusMessage.append("\nIn die Integritätsdatei wurden nur die Wurzeln der Hash-Trees geschrieben.\n");
+    }
+    statusMessage.append("\nDie Integritätsdatei wurde unter \"");
     statusMessage.append(integrityFilePath);
-    statusMessage.append("\n");
-    statusMessage.append("Ordering information written to: ");
+    statusMessage.append("\" gespeichert.\n");
+    statusMessage.append("Die Ordnungsdatei wurde unter \"");
     statusMessage.append(orderFilePath);
-    statusMessage.append("\n");
+    statusMessage.append("\" gespeichert.\n");
     System.out.println(statusMessage);
   }
 
   private static void testIntegrityInformation(final Path dipDir) {
+    if (readIntegrityFile(dipDir) && readFileOrder(dipDir) && readDipFiles(dipDir)) {
+      validateDip();
+    }
+  }
 
+  private static boolean readIntegrityFile(final Path dipDir) {
+    System.out.println("\nDatei-Integritätsinformationen werden eingelesen.\n");
+    boolean success = true;
+    expectedHashForrest = new HashForest<SHA512HashValue>();
+    final File integrityFile = Paths.get(dipDir.toString(), HashForest.INTEGRITYFILENAME).toFile();
+    if (integrityFile.isFile() && integrityFile.canRead() && integrityFile.length() != 0) {
+      try {
+        expectedHashForrest.readFrom(new FileReader(integrityFile, HashForest.CHARSET));
+      } catch (FileNotFoundException e) {
+        System.out.println(ErrorUtil.getFileErrorMessage(
+          HashForest.INTEGRITYFILENAME,
+          ErrorUtil.ErrorType.FILE_NOT_FOUND
+        ));
+        success = false;
+      } catch (IOException e) {
+        System.out.println(ErrorUtil.getFileErrorMessage(
+          HashForest.INTEGRITYFILENAME,
+          ErrorUtil.ErrorType.FILE_NOT_READABLE
+        ));
+        success = false;
+      } catch (InvalidInputException e) {
+        System.out.println(ErrorUtil.getFileErrorMessage(
+          HashForest.INTEGRITYFILENAME,
+          ErrorUtil.ErrorType.FILE_FORMAT_INVALID
+        ));
+        success = false;
+      }
+    } else {
+      success = false;
+      System.out.println(ErrorUtil.getFileErrorMessage(
+        HashForest.INTEGRITYFILENAME,
+        ErrorUtil.ErrorType.FILE_NOT_READABLE
+      ));
+    }
+    return success;
+  }
+
+  private static boolean readFileOrder(final Path dipDir) {
+    System.out.println("Datei-Ordnungsinformationen werden eingelesen.\n");
+    boolean success = true;
+    final File orderingFile = Paths.get(dipDir.toString(), OrderUtil.ORDERFILENAME).toFile();
+    if (orderingFile.isFile() && orderingFile.canRead() && orderingFile.length() != 0) {
+      try {
+        final ChecksumUtil checksumProvider = new ChecksumUtil(MessageDigest.getInstance("SHA-512"));
+        fileOrder = new OrderUtil(checksumProvider);
+        fileOrder.readFrom(new FileReader(orderingFile, OrderUtil.CHARSET));
+      } catch (NoSuchAlgorithmException e) {
+        // clearly a developer error, reraise instead of propagating to ui
+        throw new RuntimeException(e);
+      } catch (FileNotFoundException e) {
+        System.out.println(ErrorUtil.getFileErrorMessage(
+          OrderUtil.ORDERFILENAME,
+          ErrorUtil.ErrorType.FILE_NOT_FOUND
+        ));
+        success = false;
+      } catch (IOException e) {
+        System.out.println(ErrorUtil.getFileErrorMessage(
+          OrderUtil.ORDERFILENAME,
+          ErrorUtil.ErrorType.FILE_NOT_READABLE
+        ));
+        success = false;
+      } catch (InvalidInputException e) {
+        System.out.println(ErrorUtil.getFileErrorMessage(
+          OrderUtil.ORDERFILENAME,
+          ErrorUtil.ErrorType.FILE_FORMAT_INVALID
+        ));
+        success = false;
+      }
+    } else {
+      success = false;
+      System.out.println(ErrorUtil.getFileErrorMessage(
+        OrderUtil.ORDERFILENAME,
+        ErrorUtil.ErrorType.FILE_NOT_READABLE
+      ));
+    }
+    return success;
+  }
+
+  private static boolean readDipFiles(final Path dipDir) {
+    final int fileNumber = fileOrder.getIdentifiers().size();
+    int currentFile = 1;
+    actualdHashForrest = new HashForest<SHA512HashValue>();
+    boolean success = true;
+    for (String fileName : fileOrder.getIdentifiers()) {
+      try {
+        System.out.println("Lese Date " + currentFile + " von " + fileNumber + " ein.");
+        final Path filePath = Paths.get(dipDir.toString(), fileName);
+        final SHA512HashValue fileHash = FileUtil.getHash(filePath.toString());
+        actualdHashForrest.update(fileHash);
+        ++currentFile;
+      } catch (NoSuchAlgorithmException e) {
+        // clearly a developer error, reraise instead of propagating to ui
+        throw new RuntimeException(e);
+      } catch (FileNotFoundException e) {
+        System.out.println(ErrorUtil.getFileErrorMessage(
+          fileName,
+          ErrorUtil.ErrorType.FILE_NOT_FOUND
+        ));
+        success = false;
+        break;
+      } catch (IOException e) {
+        System.out.println(ErrorUtil.getFileErrorMessage(
+          fileName,
+          ErrorUtil.ErrorType.FILE_NOT_READABLE
+        ));
+        success = false;
+        break;
+      }
+    }
+    return success;
+  }
+
+  private static void validateDip() {
+    System.out.println("\nIntegrität des Nutzungspakets wird überprüft.");
+    if (expectedHashForrest.validate(actualdHashForrest)) {
+      System.out.println("\nDie Prüfung wurde erfolgreich beendet. Ihr Nutzungspaket ist unverändert.\n");
+    } else {
+      System.out.println("\nDie Prüfung ist fehlgeschlagen. Ihr Nutzungspaket ist beschädigt oder verändert.\n");
+    }
   }
 
   private static Path getDipDir(final String commandLineValue) {
     final Path dipDir = Paths.get(System.getProperty("user.dir"), commandLineValue);
     if (!Files.isDirectory(dipDir)) {
-      System.out.println("The path \"" + dipDir + "\" is no valid directory.");
+      System.out.println("Der Pfad für das Nutzungspaket \"" + dipDir + "\" ist kein Ordner.");
       System.exit(1);
     }
     return dipDir.normalize();
@@ -181,7 +310,7 @@ public class DipIntegrityGenerator {
         .filter(Files::isRegularFile)
         .collect(Collectors.toList());
     } catch (IOException e) {
-      System.out.println("DIP directory files can't be read.");
+      System.out.println("Die Dateien in ihrem Nutzungspaket können nicht ausgelesen werden.");
       System.out.println(e.getMessage());
       System.exit(1);
     }
