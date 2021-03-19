@@ -33,14 +33,30 @@ public class DipIntegrityGenerator {
 
   private static final String invokeCommand = "java -jar dip_integrity_generation.jar";
   private static final HelpFormatter formatter = new HelpFormatter();
-  private static final Option createIntegrityInformation = new Option("c", "create", true, "dip dir");
-  private static final Option testIntegrityInformation = new Option("t", "test", true, "dip dir");
   private static final Options options = new Options();
   private static CommandLine cmd;
 
+  private static final Option createIntegrityInformation = new Option(
+    "c",
+    "create",
+    true,
+    "Select DIP directory for the generation of the integrity information."
+  );
+  private static final Option testIntegrityInformation = new Option(
+    "t",
+    "test",
+    true,
+    "Select DIP directory for integrity check.");
+  private static final Option fullHashTree = new Option(
+    "f",
+    "full", false,
+    "Write full hash tree and not only the root nodes."
+  );
+
+
   private static OrderUtil fileOrder;
 
-  private static void createIntegrityInformation(final Path dipDir) {
+  private static void createIntegrityInformation(final Path dipDir, final boolean fullHashTree) {
     final Path orderFilePath = Paths.get(dipDir.toString(), OrderUtil.ORDERFILENAME);
     final Path integrityFilePath = Paths.get(dipDir.toString(), HashForest.INTEGRITYFILENAME);
     try {
@@ -53,7 +69,14 @@ public class DipIntegrityGenerator {
     }
     final List<Path> fileList = getFileList(dipDir);
     generateOrderFile(orderFilePath, fileList);
-    generateIntegrityFile(dipDir, integrityFilePath);
+    generateIntegrityFile(dipDir, integrityFilePath, fullHashTree);
+    printIntegrityFileCreationSuccessMessage(
+      dipDir,
+      fileOrder.getIdentifiers().size(),
+      fullHashTree ? HashForest.Mode.FULL : HashForest.Mode.ROOTS,
+      integrityFilePath,
+      orderFilePath
+    );
   }
 
   private static void generateOrderFile(final Path orderFilePath, final List<Path> fileList) {
@@ -81,7 +104,11 @@ public class DipIntegrityGenerator {
     }
   }
 
-  private static void generateIntegrityFile(final Path dipDir, final Path integrityFilePath) {
+  private static void generateIntegrityFile(
+    final Path dipDir,
+    final Path integrityFilePath,
+    final boolean fullHashTree
+  ) {
     final List<String> fileOrderList = fileOrder.getIdentifiers();
     final HashForest<SHA512HashValue> hf = new HashForest<SHA512HashValue>();
     try {
@@ -91,7 +118,7 @@ public class DipIntegrityGenerator {
         hf.update(hashValue);
       }
       hf.setOrderInformationLocation(OrderUtil.ORDERFILENAME);
-      hf.pruneForest();
+      if (!fullHashTree) hf.pruneForest();
       Files.createFile(integrityFilePath);
       final File integrityFile = integrityFilePath.toFile();
       final Writer fstream = new OutputStreamWriter(new FileOutputStream(integrityFile, false), HashForest.CHARSET);
@@ -105,6 +132,33 @@ public class DipIntegrityGenerator {
       System.out.println(e.getMessage());
       System.exit(1);
     }
+  }
+
+  private static void printIntegrityFileCreationSuccessMessage(
+    final Path dipDir,
+    final int fileNumber,
+    final HashForest.Mode mode,
+    final Path integrityFilePath,
+    final Path orderFilePath
+  ) {
+    final StringBuilder statusMessage = new StringBuilder(500);
+    statusMessage.append("\n");
+    statusMessage.append("Created integrity information for ");
+    statusMessage.append(dipDir);
+    statusMessage.append("\n");
+    statusMessage.append("Files: ");
+    statusMessage.append(fileNumber);
+    statusMessage.append("\n");
+    statusMessage.append("Mode: ");
+    statusMessage.append(mode.toString());
+    statusMessage.append("\n");
+    statusMessage.append("Integrity information written to: ");
+    statusMessage.append(integrityFilePath);
+    statusMessage.append("\n");
+    statusMessage.append("Ordering information written to: ");
+    statusMessage.append(orderFilePath);
+    statusMessage.append("\n");
+    System.out.println(statusMessage);
   }
 
   private static void testIntegrityInformation(final Path dipDir) {
@@ -139,6 +193,7 @@ public class DipIntegrityGenerator {
     optionGroup.addOption(createIntegrityInformation);
     optionGroup.addOption(testIntegrityInformation);
     options.addOptionGroup(optionGroup);
+    options.addOption(fullHashTree);
     final CommandLineParser parser = new DefaultParser();
     try {
       cmd = parser.parse(options, args);
@@ -153,7 +208,7 @@ public class DipIntegrityGenerator {
     parseCommandLineArguments(args);
     if (cmd.hasOption("c")) {
       final Path dipDir = getDipDir(cmd.getOptionValue("c"));
-      createIntegrityInformation(dipDir);
+      createIntegrityInformation(dipDir, cmd.hasOption("f"));
     } else if (cmd.hasOption("t")) {
       final Path dipDir = getDipDir(cmd.getOptionValue("t"));
       testIntegrityInformation(dipDir);
