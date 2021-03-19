@@ -21,7 +21,7 @@ application {
 
 shadowJar {
   mainClassName = 'lath.integrity.DipIntegrityGenerator'
-  archiveBaseName  = 'dip_integrity_generation'
+  archiveBaseName  = 'dip_integrity_cli'
 }
 
 tasks.withType(JavaCompile) {
