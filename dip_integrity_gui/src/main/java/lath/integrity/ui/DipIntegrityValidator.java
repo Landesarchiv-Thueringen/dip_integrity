@@ -237,6 +237,7 @@ public class DipIntegrityValidator extends Application {
         ErrorUtil.ErrorType.FILE_NOT_READABLE
       ));
     }
+    taskList.get(taskId).progress = 1.0;
     return success;
   }
 
