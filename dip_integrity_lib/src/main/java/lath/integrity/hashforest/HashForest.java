@@ -286,12 +286,12 @@ public class HashForest<T extends HashValue> implements TextSerializable {
    * information in the correct place in order to allow validation of the
    * data.</strong>
    *
-   * @see getOrderUtilInformationLocation()
+   * @see getOrderInformationLocation()
    *
    * @param orderingInfo
    *            OrderUtil information storage location
    */
-  public void setOrderUtilInformationLocation(String orderingInfo) {
+  public void setOrderInformationLocation(String orderingInfo) {
     this.orderingInformationLocation = orderingInfo;
   }
 
@@ -299,11 +299,11 @@ public class HashForest<T extends HashValue> implements TextSerializable {
    * Returns the location where ordering information for this HashForest
    * component is stored.
    *
-   * @see setOrderUtilInformationLocation(String orderingInfo)
+   * @see setOrderInformationLocation(String orderingInfo)
    *
    * @return OrderUtil information storage location
    */
-  public String getOrderUtilInformationLocation() {
+  public String getOrderInformationLocation() {
     return orderingInformationLocation;
   }
 

@@ -23,7 +23,10 @@ import org.apache.commons.cli.OptionGroup;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
+import lath.integrity.hashforest.HashForest;
+import lath.integrity.hashforest.SHA512HashValue;
 import lath.integrity.util.ChecksumUtil;
+import lath.integrity.util.FileUtil;
 import lath.integrity.util.OrderUtil;
 
 public class DipIntegrityGenerator {
@@ -35,26 +38,70 @@ public class DipIntegrityGenerator {
   private static final Options options = new Options();
   private static CommandLine cmd;
 
+  private static OrderUtil fileOrder;
+
   private static void createIntegrityInformation(final Path dipDir) {
+    final Path orderFilePath = Paths.get(dipDir.toString(), OrderUtil.ORDERFILENAME);
+    final Path integrityFilePath = Paths.get(dipDir.toString(), HashForest.INTEGRITYFILENAME);
+    try {
+      Files.deleteIfExists(orderFilePath);
+      Files.deleteIfExists(integrityFilePath);
+    } catch (final IOException e) {
+      System.out.println("error deleting old integrity information files");
+      System.out.println(e.getMessage());
+      System.exit(1);
+    }
     final List<Path> fileList = getFileList(dipDir);
+    generateOrderFile(orderFilePath, fileList);
+    generateIntegrityFile(dipDir, integrityFilePath);
+  }
+
+  private static void generateOrderFile(final Path orderFilePath, final List<Path> fileList) {
     try {
       final ChecksumUtil checksumProvider = new ChecksumUtil(MessageDigest.getInstance("SHA-512"));
-      final OrderUtil fileOrder = new OrderUtil(checksumProvider);
+      fileOrder = new OrderUtil(checksumProvider);
       fileOrder.add(OrderUtil.ORDERFILENAME);
       final Path root = Paths.get(System.getProperty("user.dir"));
       for (final Path filePath : fileList) {
         final Path relativePath = filePath.subpath(root.getNameCount(), filePath.getNameCount());
         fileOrder.add(relativePath.toString());
       }
-      final File orderFile = Paths.get(dipDir.toString(), OrderUtil.ORDERFILENAME).toFile();
+      Files.createFile(orderFilePath);
+      final File orderFile = orderFilePath.toFile();
       final Writer fstream = new OutputStreamWriter(new FileOutputStream(orderFile, false), OrderUtil.CHARSET);
       fileOrder.writeTo(fstream);
       fstream.close();
     } catch (NoSuchAlgorithmException e) {
-      // clearly a developer error, reraise instead of propagating to ui
+      // clearly a developer error, reraise instead of propagating
       throw new RuntimeException(e);
     } catch (IOException e) {
       System.out.println("error writing order file");
+      System.out.println(e.getMessage());
+      System.exit(1);
+    }
+  }
+
+  private static void generateIntegrityFile(final Path dipDir, final Path integrityFilePath) {
+    final List<String> fileOrderList = fileOrder.getIdentifiers();
+    final HashForest<SHA512HashValue> hf = new HashForest<SHA512HashValue>();
+    try {
+      for (final String fileName : fileOrderList) {
+        final Path filePath = Paths.get(dipDir.toString(), fileName);
+        final SHA512HashValue hashValue = FileUtil.getHash(filePath.toString());
+        hf.update(hashValue);
+      }
+      hf.setOrderInformationLocation(OrderUtil.ORDERFILENAME);
+      hf.pruneForest();
+      Files.createFile(integrityFilePath);
+      final File integrityFile = integrityFilePath.toFile();
+      final Writer fstream = new OutputStreamWriter(new FileOutputStream(integrityFile, false), HashForest.CHARSET);
+      hf.writeTo(fstream);
+      fstream.close();
+    } catch (NoSuchAlgorithmException e) {
+      // clearly a developer error, reraise instead of propagating
+      throw new RuntimeException(e);
+    } catch (IOException e) {
+      System.out.println("error writing integrity file");
       System.out.println(e.getMessage());
       System.exit(1);
     }
