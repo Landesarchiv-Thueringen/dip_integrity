@@ -1,0 +1,24 @@
+plugins {
+  id 'java-library'
+}
+
+repositories {
+  jcenter()
+}
+
+dependencies {
+  testImplementation 'junit:junit:4.13'
+  implementation 'com.google.guava:guava:29.0-jre'
+}
+
+jar {
+  archiveBaseName  = 'dip_integrity_lib'
+  archiveVersion  = '1.0'
+}
+
+task copyJarToBin(type: Copy) {
+  from jar // shortcut for jar.outputs.files
+  into '../bin'
+}
+
+build.finalizedBy(copyJarToBin)

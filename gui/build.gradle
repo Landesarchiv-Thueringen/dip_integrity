@@ -1,0 +1,42 @@
+plugins {
+  id 'application'
+  id 'org.openjfx.javafxplugin' version '0.0.9'
+  id 'com.github.johnrengelman.shadow' version '6.1.0'
+}
+
+jar.enabled = false
+
+repositories {
+  jcenter()
+}
+
+dependencies {
+  implementation 'com.google.guava:guava:29.0-jre'
+  implementation project(':lib');
+}
+
+javafx {
+  version = '15.0.1'
+  modules = [ 'javafx.controls' ]
+}
+
+application {
+  mainClass = 'lath.integrity.App'
+}
+
+shadowJar {
+  mainClassName = 'lath.integrity.App'
+  archiveBaseName  = 'dip_integrity_gui'
+  archiveVersion  = '1.0'
+}
+
+tasks.withType(JavaCompile) {
+    options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+}
+
+task copyJarToBin(type: Copy) {
+  from shadowJar // shortcut for shadowJar.outputs.files
+  into '../bin'
+}
+
+build.finalizedBy(copyJarToBin)

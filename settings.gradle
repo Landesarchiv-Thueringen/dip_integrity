@@ -7,5 +7,5 @@
  * in the user manual at https://docs.gradle.org/6.8.2/userguide/multi_project_builds.html
  */
 
-rootProject.name = 'lath_integrity_audit'
-include 'dip_integrity_lib','dip_integrity_cli', 'dip_integrity_gui'
+rootProject.name = 'dip_integrity'
+include 'lib','cli', 'gui'
