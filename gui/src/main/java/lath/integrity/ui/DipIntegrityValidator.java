@@ -105,7 +105,7 @@ public class DipIntegrityValidator extends Application {
     controlLayout.setAlignment(Pos.CENTER);
     logoContentSpacer.setPrefHeight(30);
     warningMessageSpacer.setPrefHeight(20);
-    controlSpacer.setPrefHeight(20);
+    controlSpacer.setPrefHeight(50);
     bottomSpacer.setPrefHeight(30);
   }
 
@@ -295,11 +295,19 @@ public class DipIntegrityValidator extends Application {
       final List<String> actualFileList = Files.walk(dipDir)
         .filter(Files::isRegularFile)
         .map(path -> path.subpath(dipDir.getNameCount(), path.getNameCount()).toString())
+        .sorted()
         .collect(Collectors.toList());
       actualFileList.remove(HashForest.INTEGRITYFILENAME);
       actualFileList.removeAll(expectedFileList);
       if (actualFileList.size() > 0) {
-        showWarningMessage("Im ausgewählten Nutzungspaket befinden sich zusätzliche Dateien.");
+        final StringBuilder warningMessage = new StringBuilder(5000);
+        warningMessage.append("Im ausgewählten Nutzungspaket befinden sich folgende zusätzliche Dateien:\n\n");
+        for (final String additionalFileName : actualFileList) {
+          warningMessage.append("- ");
+          warningMessage.append(additionalFileName);
+          warningMessage.append("\n");
+        }
+        showWarningMessage(warningMessage.toString());
       }
     } catch (IOException e) {
       showErrorMessage("Die Dateien in ihrem Nutzungspaket können nicht gelesen werden.");
