@@ -4,8 +4,13 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -42,6 +47,7 @@ public class DipIntegrityValidator extends Application {
   private final ObservableList<Task> taskList = FXCollections.observableArrayList();
   private final ListView<Task> taskListView = new ListView<Task>(taskList);
   private static final int TASK_LIST_ITEM_HEIGHT = 50;
+  private final Label warningMessageLabel = new Label();
   private final Label successMessageLabel = new Label();
   private final Label errorMessageLabel = new Label();
   private final Image icon = new Image("/icon.png");
@@ -49,6 +55,7 @@ public class DipIntegrityValidator extends Application {
   private final ImageView logoImageView = new ImageView(logo);
   private final HBox logoLayout = new HBox(logoImageView);
   private final Region logoContentSpacer = new Region();
+  private final Region warningMessageSpacer = new Region();
   private final Region controlSpacer = new Region();
   private final Region bottomSpacer = new Region();
   private final HBox controlLayout = new HBox(chooseDipButton);
@@ -56,13 +63,15 @@ public class DipIntegrityValidator extends Application {
     logoLayout,
     logoContentSpacer,
     taskListView,
-    successMessageLabel,
+    warningMessageLabel,
+    warningMessageSpacer,
     errorMessageLabel,
+    successMessageLabel,
     controlSpacer,
     controlLayout,
     bottomSpacer
   );
-  private final Scene scene = new Scene(rootLayout, 600, 650);
+  private final Scene scene = new Scene(rootLayout, 650, 650);
 
   // integrity check
   private HashForest<SHA512HashValue> expectedHashForrest;
@@ -85,6 +94,7 @@ public class DipIntegrityValidator extends Application {
     initTaskListView();
     initSuccessMessage();
     initErrorMessage();
+    initWarningMessage();
     primaryStage.show();
   }
 
@@ -94,15 +104,17 @@ public class DipIntegrityValidator extends Application {
     logoLayout.setAlignment(Pos.CENTER);
     controlLayout.setAlignment(Pos.CENTER);
     logoContentSpacer.setPrefHeight(30);
+    warningMessageSpacer.setPrefHeight(20);
     controlSpacer.setPrefHeight(20);
-    bottomSpacer.setPrefHeight(20);
+    bottomSpacer.setPrefHeight(30);
   }
 
   private void initControls(final Stage primaryStage) {
     chooseDipButton.setOnAction(actionEvent ->  {
       taskList.clear();
-      successMessageLabel.setVisible(false);
-      errorMessageLabel.setVisible(false);
+      hideWarningMessage();
+      hideErrorMessage();
+      hideSuccessMessage();
       addSelectDipTask();
       final File dipDir = selectDipDir(primaryStage);
       if (dipDir != null) {
@@ -129,7 +141,7 @@ public class DipIntegrityValidator extends Application {
   }
 
   private void initSuccessMessage() {
-    successMessageLabel.setVisible(false);
+    hideSuccessMessage();
     successMessageLabel.setTextFill(Color.web("#2E8B57"));
     successMessageLabel.setStyle("-fx-font-weight: bold;");
     successMessageLabel.setWrapText(true);
@@ -138,10 +150,16 @@ public class DipIntegrityValidator extends Application {
   private void showSuccessMessage(final String successMessage) {
     successMessageLabel.setText(successMessage);
     successMessageLabel.setVisible(true);
+    successMessageLabel.setManaged(true);
+  }
+
+  private void hideSuccessMessage() {
+    successMessageLabel.setVisible(false);
+    successMessageLabel.setManaged(false);
   }
 
   private void initErrorMessage() {
-    errorMessageLabel.setVisible(false);
+    hideErrorMessage();
     errorMessageLabel.setTextFill(Color.web("#B22222"));
     errorMessageLabel.setStyle("-fx-font-weight: bold;");
     errorMessageLabel.setWrapText(true);
@@ -150,6 +168,34 @@ public class DipIntegrityValidator extends Application {
   private void showErrorMessage(final String errorMessage) {
     errorMessageLabel.setText(errorMessage);
     errorMessageLabel.setVisible(true);
+    errorMessageLabel.setManaged(true);
+  }
+
+  private void hideErrorMessage() {
+    errorMessageLabel.setVisible(false);
+    errorMessageLabel.setManaged(false);
+  }
+
+  private void initWarningMessage() {
+    hideWarningMessage();
+    warningMessageLabel.setTextFill(Color.web("#FF4500"));
+    warningMessageLabel.setStyle("-fx-font-weight: bold;");
+    warningMessageLabel.setWrapText(true);
+  }
+
+  private void showWarningMessage(final String warningMessage) {
+    warningMessageLabel.setText(warningMessage);
+    warningMessageLabel.setVisible(true);
+    warningMessageLabel.setManaged(true);
+    warningMessageSpacer.setManaged(true);
+    warningMessageSpacer.setVisible(true);
+  }
+
+  private void hideWarningMessage() {
+    warningMessageLabel.setVisible(false);
+    warningMessageLabel.setManaged(false);
+    warningMessageSpacer.setManaged(false);
+    warningMessageSpacer.setVisible(false);
   }
 
   private File selectDipDir(final Stage primaryStage) {
@@ -238,6 +284,27 @@ public class DipIntegrityValidator extends Application {
       ));
     }
     taskList.get(taskId).progress = 1.0;
+    return success && checkFileOrder(dipDir.toPath());
+  }
+
+  private boolean checkFileOrder(final Path dipDir) {
+    boolean success = true;
+    final List<String> expectedFileList = fileOrder.getIdentifiers();
+    try {
+      // get all relative file paths in dip directory
+      final List<String> actualFileList = Files.walk(dipDir)
+        .filter(Files::isRegularFile)
+        .map(path -> path.subpath(dipDir.getNameCount(), path.getNameCount()).toString())
+        .collect(Collectors.toList());
+      actualFileList.remove(HashForest.INTEGRITYFILENAME);
+      actualFileList.removeAll(expectedFileList);
+      if (actualFileList.size() > 0) {
+        showWarningMessage("Im ausgewählten Nutzungspaket befinden sich zusätzliche Dateien.");
+      }
+    } catch (IOException e) {
+      showErrorMessage("Die Dateien in ihrem Nutzungspaket können nicht gelesen werden.");
+      success = false;
+    }
     return success;
   }
 
