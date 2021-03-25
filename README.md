@@ -47,33 +47,49 @@ java -jar ./bin/dip_integrity_cli-1.0-all.jar -c ../DIP -f
 #### Integritätsinformationen prüfen
 
 ```
-java -jar ./bin/dip_integrity_cli-1.0-all.jar -t ../DIP 
+java -jar ./bin/dip_integrity_cli-1.0-all.jar -t ../DIP
 ```
 
 ### Grafische Benutzeroberfläche
 
-bla bla bla
+Die grafische Benutzeroberfläche dient ausschließlich dem Testen der Integritätsinformation. Die Anwendung soll den eigentlichen Nutzern der Nutzungspakete zur Verfügung gestellt werden, damit diese jederzeit die Integrität überprüfen können.
 
-#### Erfolgreiche Integritätsprüfung
+#### Logo
+
+Sie können das Logo im Kopf der Anwendung durch ihr eigenes austauschen ohne den Quellcode dafür zu verändern. Sie müssen dafür nur die Datei unter [gui\src\main\resources\logo.png](gui\src\main\resources\logo.png) durch ihr Logo austauschen und das Projekt neu Kompilieren. Die Anwendung skaliert Ihr Logo so das eine Auflösung von 550px x 150px bestmöglich ausgefüllt wird. Dabei wird das Seitenverhältnis des Bildes nicht verändert.
+
+#### Icon
+
+Sie können das Icon im Kopf der Anwendung durch ihr eigenes austauschen ohne den Quellcode dafür zu verändern. Sie müssen dafür nur die Datei unter [gui\src\main\resources\icon.png](gui\src\main\resources\icon.png) durch ihr eigenes Icon austauschen und das Projekt neu Kompilieren. Das Icon sollte eine Auflösung von 64px x 64px haben.
+
+#### Nutzungsszenarien
+
+__Erfolgreiche Integritätsprüfung__
 
 ![gui-succes](doc/screenshot/gui_success.png "erfolgreichen Integritätsprüfung")
 
 Bei einer erfolgreichen Integritätsprüfung wird eine entsprechende Erfolgsmeldung ausgegeben.
 
-#### Primärdateien wurden verändert
+__Primärdateien wurden verändert__
 
 ![gui-hash-tree-fail](doc/screenshot/gui_hash_tree_fail.png "fehlgeschlagene Integritätsprüfung")
 
 Bei einer negativen Integritätsprüfung wird eine entsprechende Fehlermeldung ausgegeben.
 
-#### Warnung vor Zusätzlichen Primärdateien im Nutzungspaket
+__Warnung vor Zusätzlichen Primärdateien im Nutzungspaket__
 
 ![gui-warning](doc/screenshot/gui_warning_additional_files.png "Warnung vor zusätzlichen Dateien")
 
 Wenn Dateien im Verzeichnis des Nutzungspakets enthalten sind, die nicht bei der Erstellung der Integritätsinformation vorhanden waren, wird eine entsprechende Warnung ausgegeben, welche die zusätzlichen Dateien auflistet. Die Dateiliste wird abgekürzt, wenn diese auf Grund von fehlendem Platz nicht dargestellt werden kann.
 
-#### Fehler bei fehlenden Dateien
+__Fehler bei fehlenden Primärdateien__
 
 ![gui-error-missing-file](doc/screenshot/gui_missing_file.png "Fehler wegen fehlender Primärdatei")
 
 Wenn im Nutzungspaket Primärdateien fehlen, kann die Integrität nicht weiter geprüft werden und es wird eine entsprechende Fehlermeldung ausgegeben.
+
+__Fehler bei fehlenden Integritätsdateien__
+
+![gui-error-missing-integrity-file](doc\screenshot\gui_missing_integrity_file.png "Fehler wegen fehlender Integritätsdateien")
+
+Wenn im Nutzungspaket Integritätsdateien fehlen, kann die Integrität nicht weiter geprüft werden und es wird eine entsprechende Fehlermeldung ausgegeben.
