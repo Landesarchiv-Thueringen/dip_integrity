@@ -6,6 +6,7 @@ public class ErrorUtil {
     FILE_NOT_FOUND,
     FILE_NOT_READABLE,
     FILE_FORMAT_INVALID,
+    FILE_CHECKSUM_INVALID
   }
 
   public static String getFileErrorMessage(final String fileName, final ErrorType errorType) {
@@ -19,6 +20,9 @@ public class ErrorUtil {
         break;
       case FILE_FORMAT_INVALID:
         errorMessage += "entspricht nicht dem erwarteten Schema.";
+        break;
+      case FILE_CHECKSUM_INVALID:
+        errorMessage = "Die Prüfsumme der Datei \"" + fileName + "\" ist nicht korrekt.";
         break;
       default:
         errorMessage += "hat einen unbekannten Fehler.";

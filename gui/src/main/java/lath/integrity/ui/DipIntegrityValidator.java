@@ -227,10 +227,17 @@ public class DipIntegrityValidator extends Application {
         ));
         success = false;
       } catch (InvalidInputException e) {
-        showErrorMessage(ErrorUtil.getFileErrorMessage(
-          HashForest.INTEGRITYFILENAME,
-          ErrorUtil.ErrorType.FILE_FORMAT_INVALID
-        ));
+        if (e.getErrorType() == InvalidInputException.ErrorType.SCHEMA_INVALID) {
+          showErrorMessage(ErrorUtil.getFileErrorMessage(
+            OrderUtil.ORDERFILENAME,
+            ErrorUtil.ErrorType.FILE_FORMAT_INVALID
+          ));
+        } else if (e.getErrorType() == InvalidInputException.ErrorType.CHECKSUM_INVALID)  {
+          showErrorMessage(ErrorUtil.getFileErrorMessage(
+            OrderUtil.ORDERFILENAME,
+            ErrorUtil.ErrorType.FILE_CHECKSUM_INVALID
+          ));
+        }
         success = false;
       }
     } else {
@@ -270,10 +277,17 @@ public class DipIntegrityValidator extends Application {
         ));
         success = false;
       } catch (InvalidInputException e) {
-        showErrorMessage(ErrorUtil.getFileErrorMessage(
-          OrderUtil.ORDERFILENAME,
-          ErrorUtil.ErrorType.FILE_FORMAT_INVALID
-        ));
+        if (e.getErrorType() == InvalidInputException.ErrorType.SCHEMA_INVALID) {
+          showErrorMessage(ErrorUtil.getFileErrorMessage(
+            OrderUtil.ORDERFILENAME,
+            ErrorUtil.ErrorType.FILE_FORMAT_INVALID
+          ));
+        } else if (e.getErrorType() == InvalidInputException.ErrorType.CHECKSUM_INVALID)  {
+          showErrorMessage(ErrorUtil.getFileErrorMessage(
+            OrderUtil.ORDERFILENAME,
+            ErrorUtil.ErrorType.FILE_CHECKSUM_INVALID
+          ));
+        }
         success = false;
       }
     } else {

@@ -391,7 +391,10 @@ public class HashForest<T extends HashValue> implements TextSerializable {
       updateChecksum(cp, parts[0], parts[1]);
       return parts[1];
     } else {
-      throw new InvalidInputException("Expected " + expectedField + ", got " + parts[0]);
+      throw new InvalidInputException(
+        "Expected " + expectedField + ", got " + parts[0],
+        InvalidInputException.ErrorType.SCHEMA_INVALID
+      );
     }
   }
 
@@ -418,7 +421,8 @@ public class HashForest<T extends HashValue> implements TextSerializable {
     try {
       firstSerializedDateTime = DateUtil.string2Date(value);
     } catch (ParseException e1) {
-      throw new InvalidInputException("Date format invalid.");
+      throw new InvalidInputException("Date format invalid.",
+        InvalidInputException.ErrorType.SCHEMA_INVALID);
     }
 
     line = br.readLine();
@@ -462,7 +466,10 @@ public class HashForest<T extends HashValue> implements TextSerializable {
     line = br.readLine();
     String[] parts = line.split(Const.SEPARATOR);
     if (!parts[0].equals(Const.CHECKSUM) || !parts[1].equals(computedChecksum)) {
-      throw new InvalidInputException("Invalid checksum for integrity information!");
+      throw new InvalidInputException(
+        "Invalid checksum for integrity information!",
+        InvalidInputException.ErrorType.CHECKSUM_INVALID
+      );
     }
 
     // isDirty = true;

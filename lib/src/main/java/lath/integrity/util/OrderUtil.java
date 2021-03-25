@@ -47,8 +47,9 @@ public class OrderUtil implements TextSerializable {
    */
   public void add(String dataIdentifier) {
     if (dataIdentifier.contains("\n")) {
-    throw new IllegalArgumentException(
-      "Identifier contains newline character:" + dataIdentifier);
+      throw new IllegalArgumentException(
+        "Identifier contains newline character:" + dataIdentifier
+      );
     }
     identifiers.add(dataIdentifier);
     isValid = false;
@@ -132,7 +133,10 @@ public class OrderUtil implements TextSerializable {
     }
     isValid = computeChecksum(identifiers).equals(lines[0]);
     if (!isValid) {
-      throw new InvalidInputException("Invalid checksum for ordering information!");
+      throw new InvalidInputException(
+        "Invalid checksum for ordering information!",
+        InvalidInputException.ErrorType.CHECKSUM_INVALID
+      );
     }
   }
 
