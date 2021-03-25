@@ -14,8 +14,14 @@ bla bla
 
 bla bla bla
 
-#### Erfolgreiche Prüfung
+#### Erfolgreiche Integritätsprüfung
 
-![nfa-021-example](doc/screenshot/gui_success.png "NFA-021-Beispiel")
+![gui-succes](doc/screenshot/gui_success.png "erfolgreichen Integritätsprüfung")
 
 Bei einer erfolgreichen Integritätsprüfung wird eine entsprechende Erfolgsmeldung ausgegeben.
+
+#### Primärdateien wurden verändert
+
+![gui-hash-tree-fail](doc/screenshot/gui_hash_tree_fail.png "fehlgeschlagene Integritätsprüfung")
+
+Bei einer negativen Integritätsprüfung wird eine entsprechende Fehlermeldung ausgegeben.
