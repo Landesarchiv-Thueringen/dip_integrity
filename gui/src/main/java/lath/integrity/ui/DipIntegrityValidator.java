@@ -43,7 +43,7 @@ import lath.integrity.util.OrderUtil;
 public class DipIntegrityValidator extends Application {
 
   // user interface
-  private final Button chooseDipButton = new Button("Verzeichnis wählen");
+  private final Button chooseDipButton = new Button("Verzeichnis w\u00e4hlen");
   private final ObservableList<Task> taskList = FXCollections.observableArrayList();
   private final ListView<Task> taskListView = new ListView<Task>(taskList);
   private static final int TASK_LIST_ITEM_HEIGHT = 50;
@@ -84,7 +84,7 @@ public class DipIntegrityValidator extends Application {
 
   @Override
   public void start(final Stage primaryStage) {
-    primaryStage.setTitle("DIP2Go - Integritätsprüfung");
+    primaryStage.setTitle("DIP2Go - Integrit\u00e4tspr\u00fcfung");
     primaryStage.getIcons().add(icon);
     primaryStage.setResizable(false);
     scene.getStylesheets().add("main.css");
@@ -137,7 +137,7 @@ public class DipIntegrityValidator extends Application {
   }
 
   private void addSelectDipTask() {
-    taskList.add(new Task("1. Bitte wählen Sie das zu prüfende Nutzungspaket aus."));
+    taskList.add(new Task("1. Bitte w\u00e4hlen Sie das zu pr\u00fcfende Nutzungspaket aus."));
   }
 
   private void initSuccessMessage() {
@@ -200,14 +200,14 @@ public class DipIntegrityValidator extends Application {
 
   private File selectDipDir(final Stage primaryStage) {
     final DirectoryChooser fileChooser = new DirectoryChooser();
-    fileChooser.setTitle("DIP2Go - Integritätsprüfung - Verzeichnis auswählen");
+    fileChooser.setTitle("DIP2Go - Integrit\u00e4tspr\u00fcfung - Verzeichnis ausw\u00e4hlen");
     fileChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
     return fileChooser.showDialog(primaryStage);
   }
 
   private boolean readIntegrityFile(final File dipDir) {
     final int taskId = taskList.size();
-    taskList.add(new Task("2. Datei-Integritätsinformationen werden eingelesen."));
+    taskList.add(new Task("2. Datei-Integrit\u00e4tsinformationen werden eingelesen."));
     boolean success = true;
     expectedHashForrest = new HashForest<SHA512HashValue>();
     File integrityFile = new File(dipDir, HashForest.INTEGRITYFILENAME);
@@ -315,7 +315,7 @@ public class DipIntegrityValidator extends Application {
       actualFileList.removeAll(expectedFileList);
       if (actualFileList.size() > 0) {
         final StringBuilder warningMessage = new StringBuilder(5000);
-        warningMessage.append("Im ausgewählten Nutzungspaket befinden sich folgende zusätzliche Dateien:\n\n");
+        warningMessage.append("Im ausgew\u00e4hlten Nutzungspaket befinden sich folgende zus\u00e4tzliche Dateien:\n\n");
         for (final String additionalFileName : actualFileList) {
           warningMessage.append("- ");
           warningMessage.append(additionalFileName);
@@ -324,7 +324,7 @@ public class DipIntegrityValidator extends Application {
         showWarningMessage(warningMessage.toString());
       }
     } catch (IOException e) {
-      showErrorMessage("Die Dateien in ihrem Nutzungspaket können nicht gelesen werden.");
+      showErrorMessage("Die Dateien in ihrem Nutzungspaket k\u00f6nnen nicht gelesen werden.");
       success = false;
     }
     return success;
@@ -373,11 +373,11 @@ public class DipIntegrityValidator extends Application {
 
   private void validateDip() {
     final int taskId = taskList.size();
-    taskList.add(new Task("5. Integrität des Nutzungspakets wird überprüft."));
+    taskList.add(new Task("5. Integrit\u00e4t des Nutzungspakets wird \u00fcberpr\u00fcft."));
     if (expectedHashForrest.validate(actualdHashForrest)) {
-      showSuccessMessage("Die Prüfung wurde erfolgreich beendet. Ihr Nutzungspaket ist unverändert.");
+      showSuccessMessage("Die Pr\u00fcfung wurde erfolgreich beendet. Ihr Nutzungspaket ist unver\u00e4ndert.");
     } else {
-      showErrorMessage("Die Prüfung ist fehlgeschlagen. Ihr Nutzungspaket ist beschädigt oder verändert.");
+      showErrorMessage("Die Pr\u00fcfung ist fehlgeschlagen. Ihr Nutzungspaket ist besch\u00e4digt oder ver\u00e4ndert.");
     }
     taskList.get(taskId).progress = 1.0;
   }

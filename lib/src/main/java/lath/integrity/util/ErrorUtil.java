@@ -22,7 +22,7 @@ public class ErrorUtil {
         errorMessage += "entspricht nicht dem erwarteten Schema.";
         break;
       case FILE_CHECKSUM_INVALID:
-        errorMessage = "Die Prüfsumme der Datei \"" + fileName + "\" ist nicht korrekt.";
+        errorMessage = "Die Pr\u00fcfsumme der Datei \"" + fileName + "\" ist nicht korrekt.";
         break;
       default:
         errorMessage += "hat einen unbekannten Fehler.";

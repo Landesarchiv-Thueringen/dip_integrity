@@ -44,17 +44,17 @@ public class DipIntegrityGenerator {
     "c",
     "create",
     true,
-    "Select DIP directory for the generation of the integrity information."
+    "Create integrity files for selected DIP directory."
   );
   private static final Option testIntegrityInformation = new Option(
     "t",
     "test",
     true,
-    "Select DIP directory for integrity check.");
+    "Test integrity of selected DIP directory.");
   private static final Option fullHashTree = new Option(
     "f",
     "full", false,
-    "Write full hash tree and not only the root nodes."
+    "Write full hash tree and not only the root nodes in the integrity file."
   );
 
 
@@ -69,7 +69,7 @@ public class DipIntegrityGenerator {
       Files.deleteIfExists(orderFilePath);
       Files.deleteIfExists(integrityFilePath);
     } catch (final IOException e) {
-      System.out.println("Es gab einen Fehler beim Löschen veralteter Integritätsinformationen.");
+      System.out.println("Es gab einen Fehler beim L\u00f6schen veralteter Integrit\u00e4tsinformationen.");
       System.out.println(e.getMessage());
       System.exit(1);
     }
@@ -134,7 +134,7 @@ public class DipIntegrityGenerator {
       // clearly a developer error, reraise instead of propagating
       throw new RuntimeException(e);
     } catch (IOException e) {
-      System.out.println("Beim schreiben der Integritätsinformationen kam es zu einem Fehler.");
+      System.out.println("Beim schreiben der Integrit\u00e4tsinformationen kam es zu einem Fehler.");
       System.out.println(e.getMessage());
       System.exit(1);
     }
@@ -148,17 +148,17 @@ public class DipIntegrityGenerator {
     final Path orderFilePath
   ) {
     final StringBuilder statusMessage = new StringBuilder(500);
-    statusMessage.append("\nDie Integritätsinformationen für das Nutzungspaket \"");
+    statusMessage.append("\nDie Integrit\u00e4tsinformationen f\u00fcr das Nutzungspaket \"");
     statusMessage.append(dipDir);
     statusMessage.append("\" wurden erfolgreich erstellt.\n\n");
     statusMessage.append(fileNumber);
-    statusMessage.append(" Dateien wurden für die Erstellung der Integritätsinformationen berücksichtigt.\n");
+    statusMessage.append(" Dateien wurden f\u00fcr die Erstellung der Integrit\u00e4tsinformationen ber\u00fccksichtigt.\n");
     if (fullHashTree) {
-      statusMessage.append("\nIn die Integritätsdatei wurde der komplette Hash-Forest geschrieben.\n");
+      statusMessage.append("\nIn die Integrit\u00e4tsdatei wurde der komplette Hash-Forest geschrieben.\n");
     } else {
-      statusMessage.append("\nIn die Integritätsdatei wurden nur die Wurzeln der Hash-Trees geschrieben.\n");
+      statusMessage.append("\nIn die Integrit\u00e4tsdatei wurden nur die Wurzeln der Hash-Trees geschrieben.\n");
     }
-    statusMessage.append("\nDie Integritätsdatei wurde unter \"");
+    statusMessage.append("\nDie Integrit\u00e4tsdatei wurde unter \"");
     statusMessage.append(integrityFilePath);
     statusMessage.append("\" gespeichert.\n");
     statusMessage.append("Die Ordnungsdatei wurde unter \"");
@@ -174,7 +174,7 @@ public class DipIntegrityGenerator {
   }
 
   private static boolean readIntegrityFile(final Path dipDir) {
-    System.out.println("\nDatei-Integritätsinformationen werden eingelesen.\n");
+    System.out.println("\nDatei-Integrit\u00e4tsinformationen werden eingelesen.\n");
     boolean success = true;
     expectedHashForrest = new HashForest<SHA512HashValue>();
     final File integrityFile = Paths.get(dipDir.toString(), HashForest.INTEGRITYFILENAME).toFile();
@@ -286,18 +286,18 @@ public class DipIntegrityGenerator {
   }
 
   private static void validateDip() {
-    System.out.println("\nIntegrität des Nutzungspakets wird überprüft.");
+    System.out.println("\nIntegrit\u00e4t des Nutzungspakets wird \u00fcberpr\u00fcft.");
     if (expectedHashForrest.validate(actualdHashForrest)) {
-      System.out.println("\nDie Prüfung wurde erfolgreich beendet. Ihr Nutzungspaket ist unverändert.\n");
+      System.out.println("\nDie Pr\u00fcfung wurde erfolgreich beendet. Ihr Nutzungspaket ist unver\u00e4ndert.\n");
     } else {
-      System.out.println("\nDie Prüfung ist fehlgeschlagen. Ihr Nutzungspaket ist beschädigt oder verändert.\n");
+      System.out.println("\nDie Pr\u00fcfung ist fehlgeschlagen. Ihr Nutzungspaket ist besch\u00e4digt oder ver\u00e4ndert.\n");
     }
   }
 
   private static Path getDipDir(final String commandLineValue) {
     final Path dipDir = Paths.get(System.getProperty("user.dir"), commandLineValue);
     if (!Files.isDirectory(dipDir)) {
-      System.out.println("Der Pfad für das Nutzungspaket \"" + dipDir + "\" ist kein Ordner.");
+      System.out.println("Der Pfad f\u00fcr das Nutzungspaket \"" + dipDir + "\" ist kein Ordner.");
       System.exit(1);
     }
     return dipDir.normalize();
@@ -310,7 +310,7 @@ public class DipIntegrityGenerator {
         .filter(Files::isRegularFile)
         .collect(Collectors.toList());
     } catch (IOException e) {
-      System.out.println("Die Dateien in ihrem Nutzungspaket können nicht ausgelesen werden.");
+      System.out.println("Die Dateien in ihrem Nutzungspaket k\u00f6nnen nicht ausgelesen werden.");
       System.out.println(e.getMessage());
       System.exit(1);
     }
