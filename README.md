@@ -90,6 +90,18 @@ Wenn im Nutzungspaket Primärdateien fehlen, kann die Integrität nicht weiter g
 
 __Fehler bei fehlenden Integritätsdateien__
 
-![gui-error-missing-integrity-file](doc\screenshot\gui_missing_integrity_file.png "Fehler wegen fehlender Integritätsdateien")
+![gui-error-missing-integrity-file](doc/screenshot/gui_missing_integrity_file.png "Fehler wegen fehlender Integritätsdateien")
 
 Wenn im Nutzungspaket Integritätsdateien fehlen, kann die Integrität nicht weiter geprüft werden und es wird eine entsprechende Fehlermeldung ausgegeben.
+
+__Fehler bei fehlerhafter Prüfsumme von Integritätsdateien__
+
+![gui-error-checksum-integrity-file](doc/screenshot/gui_integrity_file_checksum_fail.png "Fehler wegen falscher Prüfsumme von Integritätsdateien")
+
+Wenn die Prüfsumme von einer Integritätsdateien falsch ist, kann die Integrität nicht weiter geprüft werden und es wird eine entsprechende Fehlermeldung ausgegeben. Durch die Prüfsumme sind die Integritätsdateien vor unbeabsichtigter Veränderung geschützt.
+
+__Fehler bei fehlerhaften Schema von Integritätsdateien__
+
+![gui-error-schema-integrity-file](doc/screenshot/gui_integrity_file_checksum_fail.png "Fehler wegen falschem Schema von Integritätsdateien")
+
+Wenn das erwartete Schema von einer Integritätsdateien nicht erfüllt wird, kann die Integrität nicht weiter geprüft werden und es wird eine entsprechende Fehlermeldung ausgegeben.
