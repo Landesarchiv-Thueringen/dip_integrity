@@ -2,10 +2,6 @@
 
 Dieses Projekt stellt Ihnen eine Java-Biliothek zur Integration in eigene Projekte, eine Kommandozeilen-Anwendung zum Erstellen und Testen der Integritätsinformation von Nutzungspaketen und eine grafische Benutzeroberfläche zum Testen der Integrität zur Verfügung.
 
-### Anmerkung
-
-Die Codebeispiele in dieser Readme-Datei sind für Windows geschrieben, da wir davon ausgehen, dass die meisten Nutzer dieses Betriebssystem verwenden. Sollten Sie bspw. Linux nutzen, verwenden Sie einfach __/__ statt __\\__ .
-
 ### Nachnutzung
 
 Alle bereitgestellten Komponenten können kostenfrei nachgenutzt werden, die genauen Bedingungen können Sie in der [Lizenzvereinbarung](./LICENSE) nachlesen. Die aktuellen JAR-Dateien für alle Komponenten finden Sie immer im [Binary Ordner](./bin). Diese können Sie auch direkt verwenden.
@@ -23,18 +19,36 @@ Sollten doch einmal Quellcode Anpassungen nötig sein, ist auch das ohne größe
  Wenn Sie die Voraussetzungen erfüllt haben müssen Sie zum Erstellen der JAR-Dateien nur noch folgenden Befehl im Wurzelverzeichnis des Projekts ausführen:
 
  ```
-.\gradlew build
+./gradlew build
  ```
 
 Sie können das Projekt auch in Ihre bevorzugte IDE importieren, die meisten müssten mittlerweile die Gradle-Projekt-Dateien erkennen und automatisch integrieren.
 
 ### Bibliothek
 
-Die Java Bibliothek kapselt alle Funktionen die zum Erstellen und Prüfen der Integritätsdateien benötigt werden. Bei den Integritätsdateien handelt es sich zum einen um eine Datei, welche die Datei Reihenfolge für das Nutzungspaket dokumentiert, diese essenziell für die Prüfung. Die zweite Datei speichert alle weiteren Informationen, die für die Prüfung benötigt werden. Sie können die Bibliothek wie jede andere Java Bibliothek in ein beliebiges Build-Tool einbinden und die bereitgestellten Klassen verwenden. So könnte bspw. die Komponente, die Ihre Nutzungspakete erzeugt so erweitert werden, dass die Integritätsdateien vor dem Export direkt in das Nutzungspaket integriert werden. Wie Sie die Bibliothek in Kommandozeilen-Anwendungen oder grafische Benutzeroberfläche verwenden, können Sie den anderen Komponenten entnehmen.
+Die Java Bibliothek kapselt alle Funktionen die zum Erstellen und Prüfen der Integritätsdateien benötigt werden. Bei den Integritätsdateien handelt es sich zum einen um eine Datei, welche die Datei Reihenfolge für das Nutzungspaket dokumentiert, diese ist essenziell für die Prüfung. Die zweite Datei speichert alle weiteren Informationen, die für die Prüfung benötigt werden. Sie können die Bibliothek wie jede andere Java Bibliothek in ein beliebiges Build-Tool einbinden und die bereitgestellten Klassen verwenden. So könnte bspw. die Komponente, die Ihre Nutzungspakete erzeugt so erweitert werden, dass die Integritätsdateien vor dem Export direkt in das Nutzungspaket integriert werden. Wie Sie die Bibliothek in Kommandozeilen-Anwendungen oder grafische Benutzeroberfläche verwenden, können Sie den anderen Komponenten entnehmen.
 
 ### Kommandozeilen-Anwendung
 
-Die Kommandozeilen-Anwendung ist
+Die Kommandozeilen-Anwendung ist nur eine Beispielanwendung um die Grundfunktionen der Bibliothek zu testen. In der Praxis wird man die Integritätsinformationen nicht manuell für eine Vielzahl von Nutzungspaketen erstellen. Deutlich sinnvoller wäre es die Funktionalität der Bibliothek in die eigenen Dienste zu integrieren.
+
+#### Integritätsinformationen erstellen
+
+```
+java -jar ./bin/dip_integrity_cli-1.0-all.jar -c ../DIP
+```
+
+#### Integritätsinformationen mit vollem Hashbaum speichern
+
+```
+java -jar ./bin/dip_integrity_cli-1.0-all.jar -c ../DIP -f
+```
+
+#### Integritätsinformationen prüfen
+
+```
+java -jar ./bin/dip_integrity_cli-1.0-all.jar -t ../DIP 
+```
 
 ### Grafische Benutzeroberfläche
 
