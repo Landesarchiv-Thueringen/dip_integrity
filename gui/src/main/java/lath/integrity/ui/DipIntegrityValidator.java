@@ -51,7 +51,7 @@ public class DipIntegrityValidator extends Application {
   private final Label successMessageLabel = new Label();
   private final Label errorMessageLabel = new Label();
   private final Image icon = new Image("/icon.png");
-  private final Image logo = new Image("/logo.jpg");
+  private final Image logo = new Image("/logo.png");
   private final ImageView logoImageView = new ImageView(logo);
   private final HBox logoLayout = new HBox(logoImageView);
   private final Region logoContentSpacer = new Region();
@@ -71,7 +71,7 @@ public class DipIntegrityValidator extends Application {
     controlLayout,
     bottomSpacer
   );
-  private final Scene scene = new Scene(rootLayout, 650, 650);
+  private final Scene scene = new Scene(rootLayout, 600, 650);
 
   // integrity check
   private HashForest<SHA512HashValue> expectedHashForrest;
@@ -102,6 +102,10 @@ public class DipIntegrityValidator extends Application {
     rootLayout.setVgrow(controlSpacer, Priority.ALWAYS);
     rootLayout.setStyle("-fx-background-color: white;");
     logoLayout.setAlignment(Pos.CENTER);
+    // scale logo to fit
+    logoImageView.setFitWidth(550);
+    logoImageView.setFitHeight(150);
+    logoImageView.setPreserveRatio(true);
     controlLayout.setAlignment(Pos.CENTER);
     logoContentSpacer.setPrefHeight(30);
     warningMessageSpacer.setPrefHeight(20);
