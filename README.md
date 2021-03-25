@@ -25,3 +25,9 @@ Bei einer erfolgreichen Integritätsprüfung wird eine entsprechende Erfolgsmeld
 ![gui-hash-tree-fail](doc/screenshot/gui_hash_tree_fail.png "fehlgeschlagene Integritätsprüfung")
 
 Bei einer negativen Integritätsprüfung wird eine entsprechende Fehlermeldung ausgegeben.
+
+#### Warnung vor Zusätzlichen Primärdateien im Nutzungspaket
+
+![gui-warning](doc/screenshot/gui_warning_additional_files.png "Warnung vor zusätzlichen Dateien")
+
+Wenn Dateien im Verzeichnis des Nutzungspakets enthalten sind, die nicht bei der Erstellung der Integritätsinformation vorhanden waren, wird eine entsprechende Warnung ausgegeben, welche die zusätzlichen Dateien auflistet. Die Dateiliste kann aber abgekürzt werden, wenn diese auf Grund von fehlendem Platz nicht dargestellt werden kann.

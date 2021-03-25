@@ -71,7 +71,7 @@ public class DipIntegrityValidator extends Application {
     controlLayout,
     bottomSpacer
   );
-  private final Scene scene = new Scene(rootLayout, 600, 650);
+  private final Scene scene = new Scene(rootLayout, 600, 700);
 
   // integrity check
   private HashForest<SHA512HashValue> expectedHashForrest;
