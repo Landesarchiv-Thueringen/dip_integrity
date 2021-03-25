@@ -102,6 +102,6 @@ Wenn die Pr체fsumme von einer Integrit채tsdateien falsch ist, kann die Integrit�
 
 __Fehler bei fehlerhaften Schema von Integrit채tsdateien__
 
-![gui-error-schema-integrity-file](doc/screenshot/gui_integrity_file_checksum_fail.png "Fehler wegen falschem Schema von Integrit채tsdateien")
+![gui-error-schema-integrity-file](doc/screenshot/gui_integrity_file_schema_fail.png "Fehler wegen falschem Schema von Integrit채tsdateien")
 
 Wenn das erwartete Schema von einer Integrit채tsdateien nicht erf체llt wird, kann die Integrit채t nicht weiter gepr체ft werden und es wird eine entsprechende Fehlermeldung ausgegeben.
