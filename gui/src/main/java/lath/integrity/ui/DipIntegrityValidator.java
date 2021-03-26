@@ -103,8 +103,8 @@ public class DipIntegrityValidator extends Application {
     rootLayout.setStyle("-fx-background-color: white;");
     logoLayout.setAlignment(Pos.CENTER);
     // scale logo to fit
-    logoImageView.setFitWidth(550);
-    logoImageView.setFitHeight(150);
+    logoImageView.setFitWidth(600);
+    logoImageView.setFitHeight(100);
     logoImageView.setPreserveRatio(true);
     controlLayout.setAlignment(Pos.CENTER);
     logoContentSpacer.setPrefHeight(30);
@@ -319,8 +319,8 @@ public class DipIntegrityValidator extends Application {
       actualFileList.removeAll(expectedFileList);
       if (actualFileList.size() > 0) {
         final StringBuilder warningMessage = new StringBuilder(5000);
-        warningMessage.append("Im ausgew\u00e4hlten Nutzungspaket befinden sich "
-            + "folgende zus\u00e4tzliche Dateien:\n\n");
+        warningMessage.append("Im ausgew\u00e4hlten Verzeichnis befinden sich Dateien, "
+            + "die nicht zum Nutzungspaket geh\u00f6ren:\n\n");
         for (final String additionalFileName : actualFileList) {
           warningMessage.append(additionalFileName);
           warningMessage.append(" \n");

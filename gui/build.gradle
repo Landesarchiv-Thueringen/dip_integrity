@@ -34,9 +34,9 @@ tasks.withType(JavaCompile) {
     options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
 }
 
-task copyJarToBin(type: Copy) {
+task copyJarToProjectRoot(type: Copy) {
   from shadowJar // shortcut for shadowJar.outputs.files
-  into '../bin'
+  into '../jar'
 }
 
-build.finalizedBy(copyJarToBin)
+build.finalizedBy(copyJarToProjectRoot)

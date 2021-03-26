@@ -16,9 +16,9 @@ jar {
   archiveVersion  = '1.0'
 }
 
-task copyJarToBin(type: Copy) {
+task copyJarToProjectRoot(type: Copy) {
   from jar // shortcut for jar.outputs.files
-  into '../bin'
+  into '../jar'
 }
 
-build.finalizedBy(copyJarToBin)
+build.finalizedBy(copyJarToProjectRoot)
