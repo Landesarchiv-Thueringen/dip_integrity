@@ -66,42 +66,42 @@ Sie können das Icon im Kopf der Anwendung durch ihr eigenes austauschen ohne de
 
 __Erfolgreiche Integritätsprüfung__
 
-![gui-succes](doc/screenshot/gui_success.png "erfolgreichen Integritätsprüfung")
+![gui-succes](img/screenshot/gui_success.png "erfolgreichen Integritätsprüfung")
 
 Bei einer erfolgreichen Integritätsprüfung wird eine entsprechende Erfolgsmeldung ausgegeben.
 
 __Primärdateien wurden verändert__
 
-![gui-hash-tree-fail](doc/screenshot/gui_hash_tree_fail.png "fehlgeschlagene Integritätsprüfung")
+![gui-hash-tree-fail](img/screenshot/gui_hash_tree_fail.png "fehlgeschlagene Integritätsprüfung")
 
 Bei einer negativen Integritätsprüfung wird eine entsprechende Fehlermeldung ausgegeben.
 
 __Warnung vor Zusätzlichen Primärdateien im Nutzungspaket__
 
-![gui-warning](doc/screenshot/gui_warning_additional_files.png "Warnung vor zusätzlichen Dateien")
+![gui-warning](img/screenshot/gui_warning_additional_files.png "Warnung vor zusätzlichen Dateien")
 
 Wenn Dateien im Verzeichnis des Nutzungspakets enthalten sind, die nicht bei der Erstellung der Integritätsinformation vorhanden waren, wird eine entsprechende Warnung ausgegeben, welche die zusätzlichen Dateien auflistet. Die Dateiliste wird abgekürzt, wenn diese auf Grund von fehlendem Platz nicht dargestellt werden kann.
 
 __Fehler bei fehlenden Primärdateien__
 
-![gui-error-missing-file](doc/screenshot/gui_missing_file.png "Fehler wegen fehlender Primärdatei")
+![gui-error-missing-file](img/screenshot/gui_missing_file.png "Fehler wegen fehlender Primärdatei")
 
 Wenn im Nutzungspaket Primärdateien fehlen, kann die Integrität nicht weiter geprüft werden und es wird eine entsprechende Fehlermeldung ausgegeben.
 
 __Fehler bei fehlenden Integritätsdateien__
 
-![gui-error-missing-integrity-file](doc/screenshot/gui_missing_integrity_file.png "Fehler wegen fehlender Integritätsdateien")
+![gui-error-missing-integrity-file](img/screenshot/gui_missing_integrity_file.png "Fehler wegen fehlender Integritätsdateien")
 
 Wenn im Nutzungspaket Integritätsdateien fehlen, kann die Integrität nicht weiter geprüft werden und es wird eine entsprechende Fehlermeldung ausgegeben.
 
 __Fehler bei fehlerhafter Prüfsumme von Integritätsdateien__
 
-![gui-error-checksum-integrity-file](doc/screenshot/gui_integrity_file_checksum_fail.png "Fehler wegen falscher Prüfsumme von Integritätsdateien")
+![gui-error-checksum-integrity-file](img/screenshot/gui_integrity_file_checksum_fail.png "Fehler wegen falscher Prüfsumme von Integritätsdateien")
 
 Wenn die Prüfsumme von einer Integritätsdateien falsch ist, kann die Integrität nicht weiter geprüft werden und es wird eine entsprechende Fehlermeldung ausgegeben. Durch die Prüfsumme sind die Integritätsdateien vor unbeabsichtigter Veränderung geschützt.
 
 __Fehler bei fehlerhaften Schema von Integritätsdateien__
 
-![gui-error-schema-integrity-file](doc/screenshot/gui_integrity_file_schema_fail.png "Fehler wegen falschem Schema von Integritätsdateien")
+![gui-error-schema-integrity-file](img/screenshot/gui_integrity_file_schema_fail.png "Fehler wegen falschem Schema von Integritätsdateien")
 
 Wenn das erwartete Schema von einer Integritätsdateien nicht erfüllt wird, kann die Integrität nicht weiter geprüft werden und es wird eine entsprechende Fehlermeldung ausgegeben.
