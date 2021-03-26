@@ -48,8 +48,10 @@ public class DipIntegrityValidator extends Application {
   private final ListView<Task> taskListView = new ListView<Task>(taskList);
   private static final int TASK_LIST_ITEM_HEIGHT = 50;
   private final Label warningMessageLabel = new Label();
+  private final Label warningMessageAdditionalInfoLabel = new Label();
   private final Label successMessageLabel = new Label();
   private final Label errorMessageLabel = new Label();
+  private final Label errorMessageAdditionalInfoLabel = new Label();
   private final Image icon = new Image("/icon.png");
   private final Image logo = new Image("/logo.png");
   private final ImageView logoImageView = new ImageView(logo);
@@ -64,9 +66,11 @@ public class DipIntegrityValidator extends Application {
     logoContentSpacer,
     taskListView,
     errorMessageLabel,
+    errorMessageAdditionalInfoLabel,
     successMessageLabel,
     warningMessageSpacer,
     warningMessageLabel,
+    warningMessageAdditionalInfoLabel,
     controlSpacer,
     controlLayout,
     bottomSpacer
@@ -75,7 +79,7 @@ public class DipIntegrityValidator extends Application {
 
   // integrity check
   private HashForest<SHA512HashValue> expectedHashForrest;
-  private HashForest<SHA512HashValue> actualdHashForrest;
+  private HashForest<SHA512HashValue> actualHashForrest;
   private OrderUtil fileOrder;
 
   public static void main(String[] args) {
@@ -167,17 +171,31 @@ public class DipIntegrityValidator extends Application {
     errorMessageLabel.setTextFill(Color.web("#B22222"));
     errorMessageLabel.setStyle("-fx-font-weight: bold;");
     errorMessageLabel.setWrapText(true);
+    errorMessageAdditionalInfoLabel.setStyle("-fx-padding : 1em 2em 0 3em;");
   }
 
   private void showErrorMessage(final String errorMessage) {
     errorMessageLabel.setText(errorMessage);
     errorMessageLabel.setVisible(true);
     errorMessageLabel.setManaged(true);
+    errorMessageAdditionalInfoLabel.setVisible(false);
+    errorMessageAdditionalInfoLabel.setManaged(false);
+  }
+
+  private void showErrorMessage(final String errorMessage, final String additionalInfo) {
+    errorMessageLabel.setText(errorMessage);
+    errorMessageLabel.setVisible(true);
+    errorMessageLabel.setManaged(true);
+    errorMessageAdditionalInfoLabel.setText(additionalInfo);
+    errorMessageAdditionalInfoLabel.setVisible(true);
+    errorMessageAdditionalInfoLabel.setManaged(true);
   }
 
   private void hideErrorMessage() {
     errorMessageLabel.setVisible(false);
     errorMessageLabel.setManaged(false);
+    errorMessageAdditionalInfoLabel.setVisible(false);
+    errorMessageAdditionalInfoLabel.setManaged(false);
   }
 
   private void initWarningMessage() {
@@ -185,12 +203,26 @@ public class DipIntegrityValidator extends Application {
     warningMessageLabel.setTextFill(Color.web("#FF4500"));
     warningMessageLabel.setStyle("-fx-font-weight: bold;");
     warningMessageLabel.setWrapText(true);
+    warningMessageAdditionalInfoLabel.setStyle("-fx-padding : 1em 2em 0 3em;");
   }
 
   private void showWarningMessage(final String warningMessage) {
     warningMessageLabel.setText(warningMessage);
     warningMessageLabel.setVisible(true);
     warningMessageLabel.setManaged(true);
+    warningMessageAdditionalInfoLabel.setVisible(false);
+    warningMessageAdditionalInfoLabel.setManaged(false);
+    warningMessageSpacer.setManaged(true);
+    warningMessageSpacer.setVisible(true);
+  }
+
+  private void showWarningMessage(final String warningMessage, final String additionalInfo) {
+    warningMessageLabel.setText(warningMessage);
+    warningMessageLabel.setVisible(true);
+    warningMessageLabel.setManaged(true);
+    warningMessageAdditionalInfoLabel.setText(additionalInfo);
+    warningMessageAdditionalInfoLabel.setVisible(true);
+    warningMessageAdditionalInfoLabel.setManaged(true);
     warningMessageSpacer.setManaged(true);
     warningMessageSpacer.setVisible(true);
   }
@@ -198,6 +230,8 @@ public class DipIntegrityValidator extends Application {
   private void hideWarningMessage() {
     warningMessageLabel.setVisible(false);
     warningMessageLabel.setManaged(false);
+    warningMessageAdditionalInfoLabel.setVisible(false);
+    warningMessageAdditionalInfoLabel.setManaged(false);
     warningMessageSpacer.setManaged(false);
     warningMessageSpacer.setVisible(false);
   }
@@ -318,14 +352,14 @@ public class DipIntegrityValidator extends Application {
       actualFileList.remove(HashForest.INTEGRITYFILENAME);
       actualFileList.removeAll(expectedFileList);
       if (actualFileList.size() > 0) {
-        final StringBuilder warningMessage = new StringBuilder(5000);
-        warningMessage.append("Im ausgew\u00e4hlten Verzeichnis befinden sich Dateien, "
-            + "die nicht zum Nutzungspaket geh\u00f6ren:\n\n");
+        final String warningMessage = "Im ausgew\u00e4hlten Verzeichnis befinden sich Dateien, "
+            + "die nicht zum Nutzungspaket geh\u00f6ren:";
+        final StringBuilder warningMessageAdditionalInfo = new StringBuilder(1000);
         for (final String additionalFileName : actualFileList) {
-          warningMessage.append(additionalFileName);
-          warningMessage.append(" \n");
+          warningMessageAdditionalInfo.append(additionalFileName);
+          warningMessageAdditionalInfo.append(" \n");
         }
-        showWarningMessage(warningMessage.toString());
+        showWarningMessage(warningMessage, warningMessageAdditionalInfo.toString());
       }
     } catch (IOException e) {
       showErrorMessage("Die Dateien in ihrem Nutzungspaket k\u00f6nnen nicht gelesen werden.");
@@ -340,12 +374,12 @@ public class DipIntegrityValidator extends Application {
     final int taskId = taskList.size();
     taskList.add(new Task(getFileReadingMessage(currentFile, fileNumber), false));
     final Task task = taskList.get(taskId);
-    actualdHashForrest = new HashForest<SHA512HashValue>();
+    actualHashForrest = new HashForest<SHA512HashValue>();
     boolean success = true;
     for (String fileName : fileOrder.getIdentifiers()) {
       try {
         final SHA512HashValue fileHash = FileUtil.getHash(new File(dipDir, fileName).getAbsolutePath());
-        actualdHashForrest.update(fileHash);
+        actualHashForrest.update(fileHash);
         if (currentFile < fileNumber) ++currentFile;
         task.description = getFileReadingMessage(currentFile, fileNumber);
         task.progress = (double) currentFile / fileNumber;
@@ -378,23 +412,30 @@ public class DipIntegrityValidator extends Application {
   private void validateDip() {
     final int taskId = taskList.size();
     taskList.add(new Task("5. Integrit\u00e4t des Nutzungspakets wird \u00fcberpr\u00fcft."));
-    if (expectedHashForrest.validate(actualdHashForrest)) {
+    if (expectedHashForrest.validate(actualHashForrest)) {
       showSuccessMessage("Die Pr\u00fcfung wurde erfolgreich beendet. Ihr Nutzungspaket ist unver\u00e4ndert.");
     } else {
-      final StringBuilder errorMessage = new StringBuilder(1000);
-      errorMessage.append("Die Pr\u00fcfung ist fehlgeschlagen. "
-          + "Ihr Nutzungspaket ist besch\u00e4digt oder ver\u00e4ndert.");
-      final List<String> incorrectHashList = checkFileHashTree();
-      if (!incorrectHashList.isEmpty()) {
-        errorMessage.append("\n\nDie Hashwerte folgender Dateien sind nicht korrekt:\n\n");
-        for (final String incorrectHashFile : incorrectHashList) {
-          errorMessage.append(incorrectHashFile);
-          errorMessage.append(" \n");
-        }
-      }
-      showErrorMessage(errorMessage.toString());
+      handleInvalidDip();
     }
     taskList.get(taskId).progress = 1.0;
+  }
+
+  private void handleInvalidDip() {
+    final StringBuilder errorMessage = new StringBuilder(500);
+    errorMessage.append("Die Pr\u00fcfung ist fehlgeschlagen. "
+        + "Ihr Nutzungspaket ist besch\u00e4digt oder ver\u00e4ndert.");
+    final List<String> incorrectHashList = checkFileHashTree();
+    if (!incorrectHashList.isEmpty()) {
+      final StringBuilder errorMessageAdditionalInfo = new StringBuilder(1000);
+      errorMessage.append("\n\nEs existieren Dateien, die nicht ihrer Originalversion entsprechen:");
+      for (final String incorrectHashFile : incorrectHashList) {
+        errorMessageAdditionalInfo.append(incorrectHashFile);
+        errorMessageAdditionalInfo.append(" \n");
+      }
+      showErrorMessage(errorMessage.toString(), errorMessageAdditionalInfo.toString());
+    } else {
+      showErrorMessage(errorMessage.toString());
+    }
   }
 
   private List<String> checkFileHashTree() {
@@ -402,7 +443,7 @@ public class DipIntegrityValidator extends Application {
     if (expectedHashForrest.getMode() == HashForest.Mode.FULL) {
       final List<String> fileList = fileOrder.getIdentifiers();
       final List<SHA512HashValue> expectedLeafList = expectedHashForrest.getLeafs();
-      final List<SHA512HashValue> actualLeafList = actualdHashForrest.getLeafs();
+      final List<SHA512HashValue> actualLeafList = actualHashForrest.getLeafs();
       if (expectedLeafList.size() == actualLeafList.size() && actualLeafList.size() == fileList.size()) {
         for (int index = 0; index < expectedLeafList.size(); ++index) {
           if (!expectedLeafList.get(index).equals(actualLeafList.get(index))) {
