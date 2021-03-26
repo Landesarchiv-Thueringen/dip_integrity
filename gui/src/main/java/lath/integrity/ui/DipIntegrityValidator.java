@@ -63,10 +63,10 @@ public class DipIntegrityValidator extends Application {
     logoLayout,
     logoContentSpacer,
     taskListView,
-    warningMessageLabel,
-    warningMessageSpacer,
     errorMessageLabel,
     successMessageLabel,
+    warningMessageSpacer,
+    warningMessageLabel,
     controlSpacer,
     controlLayout,
     bottomSpacer
@@ -319,11 +319,11 @@ public class DipIntegrityValidator extends Application {
       actualFileList.removeAll(expectedFileList);
       if (actualFileList.size() > 0) {
         final StringBuilder warningMessage = new StringBuilder(5000);
-        warningMessage.append("Im ausgew\u00e4hlten Nutzungspaket befinden sich folgende zus\u00e4tzliche Dateien:\n\n");
+        warningMessage.append("Im ausgew\u00e4hlten Nutzungspaket befinden sich "
+            + "folgende zus\u00e4tzliche Dateien:\n\n");
         for (final String additionalFileName : actualFileList) {
-          warningMessage.append("- ");
           warningMessage.append(additionalFileName);
-          warningMessage.append("\n");
+          warningMessage.append(" \n");
         }
         showWarningMessage(warningMessage.toString());
       }
@@ -381,8 +381,37 @@ public class DipIntegrityValidator extends Application {
     if (expectedHashForrest.validate(actualdHashForrest)) {
       showSuccessMessage("Die Pr\u00fcfung wurde erfolgreich beendet. Ihr Nutzungspaket ist unver\u00e4ndert.");
     } else {
-      showErrorMessage("Die Pr\u00fcfung ist fehlgeschlagen. Ihr Nutzungspaket ist besch\u00e4digt oder ver\u00e4ndert.");
+      final StringBuilder errorMessage = new StringBuilder(1000);
+      errorMessage.append("Die Pr\u00fcfung ist fehlgeschlagen. "
+          + "Ihr Nutzungspaket ist besch\u00e4digt oder ver\u00e4ndert.");
+      final List<String> incorrectHashList = checkFileHashTree();
+      if (!incorrectHashList.isEmpty()) {
+        errorMessage.append("\n\nDie Hashwerte folgender Dateien sind nicht korrekt:\n\n");
+        for (final String incorrectHashFile : incorrectHashList) {
+          errorMessage.append(incorrectHashFile);
+          errorMessage.append(" \n");
+        }
+      }
+      showErrorMessage(errorMessage.toString());
     }
     taskList.get(taskId).progress = 1.0;
   }
+
+  private List<String> checkFileHashTree() {
+    final List<String> incorrectHashList = new ArrayList<String>();
+    if (expectedHashForrest.getMode() == HashForest.Mode.FULL) {
+      final List<String> fileList = fileOrder.getIdentifiers();
+      final List<SHA512HashValue> expectedLeafList = expectedHashForrest.getLeafs();
+      final List<SHA512HashValue> actualLeafList = actualdHashForrest.getLeafs();
+      if (expectedLeafList.size() == actualLeafList.size() && actualLeafList.size() == fileList.size()) {
+        for (int index = 0; index < expectedLeafList.size(); ++index) {
+          if (!expectedLeafList.get(index).equals(actualLeafList.get(index))) {
+            incorrectHashList.add(fileList.get(index));
+          }
+        }
+      }
+    }
+    return incorrectHashList;
+  }
+
 }
