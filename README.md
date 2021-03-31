@@ -4,7 +4,7 @@ Das Ziel dieses Projekts ist es eine Möglichkeit zur Verfügung zustellen, mit 
 
 Dieses Projekt stellt Ihnen eine Java-Biliothek zur Integration in eigene Projekte, eine Kommandozeilen-Anwendung zum Erstellen und Testen der Integritätsinformation von Nutzungspaketen und eine grafische Benutzeroberfläche zum Testen der Integrität zur Verfügung.
 
-Für die Integritätsprüfung werden Hashbäume verwendet, das Konzept hierfür wurde von Prof. Stefan Lucks auf der [AudS 2014](https://www.sg.ch/kultur/staatsarchiv/Spezialthemen-/auds/2014.html) vorgestellt.
+Für die Integritätsprüfung werden Hash-Bäume verwendet, das Konzept hierfür wurde von Prof. Stefan Lucks auf der [AudS 2014](https://www.sg.ch/kultur/staatsarchiv/Spezialthemen-/auds/2014.html) vorgestellt.
 
 ### Integritätsnachweis
 
@@ -46,7 +46,7 @@ Die Kommandozeilen-Anwendung ist nur eine Beispielanwendung um die Grundfunktion
 java -jar ./bin/dip_integrity_cli-1.0-all.jar -c ../DIP
 ```
 
-#### Integritätsinformationen mit vollem Hashbaum speichern
+#### Integritätsinformationen mit vollem Hash-Baum speichern
 
 ```
 java -jar ./bin/dip_integrity_cli-1.0-all.jar -c ../DIP -f
@@ -92,7 +92,7 @@ __Primärdateien wurden verändert__
 
 Bei einer negativen Integritätsprüfung wird eine entsprechende Fehlermeldung ausgegeben.
 
-Wenn der volle Hashbaum gespeichert wurde, können die Dateien, die sich seit der Generierung der Integritätsinformationen verändert haben, aufgelistet werden.
+Wenn der volle Hash-Baum gespeichert wurde, können die Dateien, die sich seit der Generierung der Integritätsinformationen verändert haben, aufgelistet werden.
 
 <!------------------------------------------------------------------------------------------------->
 <div class="page-break" />
