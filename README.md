@@ -62,6 +62,10 @@ Sie können das Logo im Kopf der Anwendung durch ihr eigenes austauschen ohne de
 
 Sie können das Icon im Kopf der Anwendung durch ihr eigenes austauschen ohne den Quellcode dafür zu verändern. Sie müssen dafür nur die Datei unter [gui\src\main\resources\icon.png](gui\src\main\resources\icon.png) durch ihr eigenes Icon austauschen und das Projekt neu Kompilieren. Das Icon sollte eine Auflösung von 64px x 64px haben.
 
+<!------------------------------------------------------------------------------------------------->
+<div class="page-break" />
+<!------------------------------------------------------------------------------------------------->
+
 #### Nutzungsszenarien
 
 __Erfolgreiche Integritätsprüfung__
@@ -70,11 +74,19 @@ __Erfolgreiche Integritätsprüfung__
 
 Bei einer erfolgreichen Integritätsprüfung wird eine entsprechende Erfolgsmeldung ausgegeben.
 
+<!------------------------------------------------------------------------------------------------->
+<div class="page-break" />
+<!------------------------------------------------------------------------------------------------->
+
 __Primärdateien wurden verändert__
 
 ![gui-hash-tree-fail](img/screenshot/gui_hash_tree_fail.png "fehlgeschlagene Integritätsprüfung")
 
 Bei einer negativen Integritätsprüfung wird eine entsprechende Fehlermeldung ausgegeben.
+
+<!------------------------------------------------------------------------------------------------->
+<div class="page-break" />
+<!------------------------------------------------------------------------------------------------->
 
 __Warnung vor Zusätzlichen Primärdateien im Nutzungspaket__
 
@@ -82,11 +94,19 @@ __Warnung vor Zusätzlichen Primärdateien im Nutzungspaket__
 
 Wenn Dateien im Verzeichnis des Nutzungspakets enthalten sind, die nicht bei der Erstellung der Integritätsinformation vorhanden waren, wird eine entsprechende Warnung ausgegeben, welche die zusätzlichen Dateien auflistet. Die Dateiliste wird abgekürzt, wenn diese auf Grund von fehlendem Platz nicht dargestellt werden kann.
 
+<!------------------------------------------------------------------------------------------------->
+<div class="page-break" />
+<!------------------------------------------------------------------------------------------------->
+
 __Fehler bei fehlenden Primärdateien__
 
 ![gui-error-missing-file](img/screenshot/gui_missing_file.png "Fehler wegen fehlender Primärdatei")
 
 Wenn im Nutzungspaket Primärdateien fehlen, kann die Integrität nicht weiter geprüft werden und es wird eine entsprechende Fehlermeldung ausgegeben.
+
+<!------------------------------------------------------------------------------------------------->
+<div class="page-break" />
+<!------------------------------------------------------------------------------------------------->
 
 __Fehler bei fehlenden Integritätsdateien__
 
@@ -94,11 +114,19 @@ __Fehler bei fehlenden Integritätsdateien__
 
 Wenn im Nutzungspaket Integritätsdateien fehlen, kann die Integrität nicht weiter geprüft werden und es wird eine entsprechende Fehlermeldung ausgegeben.
 
+<!------------------------------------------------------------------------------------------------->
+<div class="page-break" />
+<!------------------------------------------------------------------------------------------------->
+
 __Fehler bei fehlerhafter Prüfsumme von Integritätsdateien__
 
 ![gui-error-checksum-integrity-file](img/screenshot/gui_integrity_file_checksum_fail.png "Fehler wegen falscher Prüfsumme von Integritätsdateien")
 
 Wenn die Prüfsumme von einer Integritätsdateien falsch ist, kann die Integrität nicht weiter geprüft werden und es wird eine entsprechende Fehlermeldung ausgegeben. Durch die Prüfsumme sind die Integritätsdateien vor unbeabsichtigter Veränderung geschützt.
+
+<!------------------------------------------------------------------------------------------------->
+<div class="page-break" />
+<!------------------------------------------------------------------------------------------------->
 
 __Fehler bei fehlerhaften Schema von Integritätsdateien__
 
