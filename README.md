@@ -56,7 +56,7 @@ Die grafische Benutzeroberfläche dient ausschließlich dem Testen der Integrit�
 
 #### Logo
 
-Sie können das Logo im Kopf der Anwendung durch ihr eigenes austauschen ohne den Quellcode dafür zu verändern. Sie müssen dafür nur die Datei unter [gui\src\main\resources\logo.png](gui\src\main\resources\logo.png) durch ihr Logo austauschen und das Projekt neu Kompilieren. Die Anwendung skaliert Ihr Logo so das eine Auflösung von 550px x 150px bestmöglich ausgefüllt wird. Dabei wird das Seitenverhältnis des Bildes nicht verändert.
+Sie können das Logo im Kopf der Anwendung durch ihr eigenes austauschen ohne den Quellcode dafür zu verändern. Sie müssen dafür nur die Datei unter [gui\src\main\resources\logo.png](gui\src\main\resources\logo.png) durch ihr Logo austauschen und das Projekt neu Kompilieren. Die Anwendung skaliert Ihr Logo so das eine Auflösung von 600px x 100px bestmöglich ausgefüllt wird. Dabei wird das Seitenverhältnis des Bildes nicht verändert.
 
 #### Icon
 
@@ -84,11 +84,13 @@ __Primärdateien wurden verändert__
 
 Bei einer negativen Integritätsprüfung wird eine entsprechende Fehlermeldung ausgegeben.
 
+Wenn der volle Hashbaum gespeichert wurde, können die Dateien, die sich seit der Generierung der Integritätsinformationen verändert haben, aufgelistet werden.
+
 <!------------------------------------------------------------------------------------------------->
 <div class="page-break" />
 <!------------------------------------------------------------------------------------------------->
 
-__Warnung vor Zusätzlichen Primärdateien im Nutzungspaket__
+__Warnung vor zusätzlichen Primärdateien im Nutzungspaket__
 
 ![gui-warning](img/screenshot/gui_warning_additional_files.png "Warnung vor zusätzlichen Dateien")
 
