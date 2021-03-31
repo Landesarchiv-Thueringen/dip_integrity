@@ -4,7 +4,11 @@ Das Ziel dieses Projekts ist es eine Möglichkeit zur Verfügung zustellen, mit 
 
 Dieses Projekt stellt Ihnen eine Java-Biliothek zur Integration in eigene Projekte, eine Kommandozeilen-Anwendung zum Erstellen und Testen der Integritätsinformation von Nutzungspaketen und eine grafische Benutzeroberfläche zum Testen der Integrität zur Verfügung.
 
-Für die Integritätsprüfung werden Hashbäume verwendet, das Konzept hierfür wurde von Prof. Stephan Lucks auf der [AudS 2014](https://www.sg.ch/kultur/staatsarchiv/Spezialthemen-/auds/2014.html) vorgestellt.
+Für die Integritätsprüfung werden Hashbäume verwendet, das Konzept hierfür wurde von Prof. Stefan Lucks auf der [AudS 2014](https://www.sg.ch/kultur/staatsarchiv/Spezialthemen-/auds/2014.html) vorgestellt.
+
+### Integritätsnachweis
+
+Für den Nachweis, dass ein Nutzungspaket nicht durch Dritte verändert wurde, ist diese Anwendung nicht geeignet, da die Integritätsinformationen mit dem Nutzungspaket geliefert werden. Die Integritätsdateien sind nicht ausreichend gegen absichtliche Änderungen geschützt. Wenn Sie diese Anwendung trotz dieser Warnung für den Zweck des Integritätsnachweises nutzen, sichern Sie sich unbedingt die Integritätsdateien der Nutzungspakete bevor diese an den Nutzer übertragen werden.
 
 ### Nachnutzung
 
