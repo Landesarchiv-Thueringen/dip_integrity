@@ -1,10 +1,12 @@
 ## DIP2Go - Integritätsprüfung
 
+Das Ziel dieses Projekts ist es eine Möglichkeit zur Verfügung zustellen, mit denen Nutzungspakete noch Jahre nach dem Export auf ihre Integrität überprüft werden können. Zu diesem Zweck hat das Landesarchiv Thüringen in Kooperation mit der [Professur für Mediensicherheit der Bauhaus-Universiät Weimar](https://www.uni-weimar.de/de/medien/professuren/medieninformatik/mediensicherheit/home/) mehrere Java-Komponenten entwickelt.
+
 Dieses Projekt stellt Ihnen eine Java-Biliothek zur Integration in eigene Projekte, eine Kommandozeilen-Anwendung zum Erstellen und Testen der Integritätsinformation von Nutzungspaketen und eine grafische Benutzeroberfläche zum Testen der Integrität zur Verfügung.
 
 ### Nachnutzung
 
-Alle bereitgestellten Komponenten können kostenfrei nachgenutzt werden, die genauen Bedingungen können Sie in der [Lizenzvereinbarung](./LICENSE) nachlesen. Die aktuellen JAR-Dateien für alle Komponenten finden Sie immer im [Binary Ordner](./bin). Diese können Sie auch direkt verwenden.
+Alle bereitgestellten Komponenten können kostenfrei nachgenutzt werden, die genauen Bedingungen können Sie in der [Lizenzvereinbarung](./LICENSE) nachlesen. Die aktuellen JAR-Dateien für alle Komponenten finden Sie immer im [jar Ordner](./jar). Diese können Sie auch direkt verwenden.
 
 #### Voraussetzungen
 
@@ -56,7 +58,7 @@ Die grafische Benutzeroberfläche dient ausschließlich dem Testen der Integrit�
 
 #### Logo
 
-Sie können das Logo im Kopf der Anwendung durch ihr eigenes austauschen ohne den Quellcode dafür zu verändern. Sie müssen dafür nur die Datei unter [gui\src\main\resources\logo.png](gui\src\main\resources\logo.png) durch ihr Logo austauschen und das Projekt neu Kompilieren. Die Anwendung skaliert Ihr Logo so das eine Auflösung von 600px x 100px bestmöglich ausgefüllt wird. Dabei wird das Seitenverhältnis des Bildes nicht verändert.
+Sie können das Logo im Kopf der Anwendung durch ihr eigenes austauschen ohne den Quellcode dafür zu verändern. Sie müssen dafür nur die Datei unter [gui\src\main\resources\logo.png](gui\src\main\resources\logo.png) durch ihr Logo austauschen und das Projekt neu Kompilieren. Die Anwendung skaliert Ihr Logo so das eine Auflösung von 600px x 100px bestmöglich ausgefüllt wird. Dabei wird das Seitenverhältnis des Bildes nicht verändert. Die besten Ergebnisse werden Sie aber erzielen, wenn Sie das Logo selbst so anpassen, dass es die vorgegebene Größe einhält.
 
 #### Icon
 
