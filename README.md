@@ -46,7 +46,7 @@ Die Kommandozeilen-Anwendung ist nur eine Beispielanwendung um die Grundfunktion
 java -jar ./bin/dip_integrity_cli-1.0-all.jar -c ../DIP
 ```
 
-#### Integritätsinformationen mit vollem Hashbaum speichern
+#### Integritätsinformationen mit vollem Hash-Baum speichern
 
 ```
 java -jar ./bin/dip_integrity_cli-1.0-all.jar -c ../DIP -f
@@ -90,7 +90,7 @@ __Primärdateien wurden verändert__
 
 Bei einer negativen Integritätsprüfung wird eine entsprechende Fehlermeldung ausgegeben.
 
-Wenn der volle Hashbaum gespeichert wurde, können die Dateien, die sich seit der Generierung der Integritätsinformationen verändert haben, aufgelistet werden.
+Wenn der volle Hash-Baum gespeichert wurde, können die Dateien, die sich seit der Generierung der Integritätsinformationen verändert haben, aufgelistet werden.
 
 ![gui-hash-tree-fail](img/screenshot/gui_hash_tree_fail.png "fehlgeschlagene Integritätsprüfung")
 
