@@ -4,11 +4,11 @@ Das Ziel dieses Projekts ist es eine Möglichkeit zur Verfügung zustellen, mit 
 
 Dieses Projekt stellt Ihnen eine Java-Biliothek zur Integration in eigene Projekte, eine Kommandozeilen-Anwendung zum Erstellen und Testen der Integritätsinformation von Nutzungspaketen und eine grafische Benutzeroberfläche zum Testen der Integrität zur Verfügung.
 
-Für die Integritätsprüfung werden Hashbäume verwendet, das Konzept hierfür wurde von Prof. Stefan Lucks auf der [AudS 2014](https://www.sg.ch/kultur/staatsarchiv/Spezialthemen-/auds/2014.html) vorgestellt.
+Für die Integritätsprüfung werden Hashbäume verwendet, das Konzept hierfür wurde im [Vortrag](https://www.sg.ch/content/dam/sgch/kultur/staatsarchiv/auds-2014/exkurs/Praesentation%20Lucks.pdf) von Prof. Stefan Lucks auf der [AUdS 2014](https://www.sg.ch/kultur/staatsarchiv/Spezialthemen-/auds/2014.html) vorgestellt.
 
 ### Integritätsnachweis
 
-Für den Nachweis, dass ein Nutzungspaket nicht durch Dritte verändert wurde, ist diese Anwendung nicht geeignet, da die Integritätsinformationen mit dem Nutzungspaket geliefert werden. Die Integritätsdateien sind nicht ausreichend gegen absichtliche Änderungen geschützt. Wenn Sie diese Anwendung trotz dieser Warnung für den Zweck des Integritätsnachweises nutzen, sichern Sie sich unbedingt die Integritätsdateien der Nutzungspakete bevor diese an den Nutzer übertragen werden.
+Für den Nachweis, dass ein Nutzungspaket nicht durch Dritte verändert wurde, ist diese Anwendung nicht geeignet, da die Integritätsinformationen mit dem Nutzungspaket geliefert werden. Die Integritätsdateien sind nicht ausreichend gegen absichtliche Änderungen geschützt. Zur Nutzung der Anwendung für einen Integritätsnachweis ist es erforderlich, die Integritätsdateien der Nutzungspakete beim Erzeuger bzw. einem vertrauenswürdigen Dritten gesondert und sicher zu speichern und die dortigen Daten für die Überprüfung zu verwenden.
 
 ### Nachnutzung
 
@@ -34,7 +34,7 @@ Sie können das Projekt auch in Ihre bevorzugte IDE importieren, die meisten mü
 
 ### Bibliothek
 
-Die Java Bibliothek kapselt alle Funktionen die zum Erstellen und Prüfen der Integritätsdateien benötigt werden. Bei den Integritätsdateien handelt es sich zum einen um eine Datei, welche die Datei Reihenfolge für das Nutzungspaket dokumentiert, diese ist essenziell für die Prüfung. Die zweite Datei speichert alle weiteren Informationen, die für die Prüfung benötigt werden. Sie können die Bibliothek wie jede andere Java Bibliothek in ein beliebiges Build-Tool einbinden und die bereitgestellten Klassen verwenden. So könnte bspw. die Komponente, die Ihre Nutzungspakete erzeugt so erweitert werden, dass die Integritätsdateien vor dem Export direkt in das Nutzungspaket integriert werden. Wie Sie die Bibliothek in Kommandozeilen-Anwendungen oder grafische Benutzeroberfläche verwenden, können Sie den anderen Komponenten entnehmen.
+Die Java Bibliothek kapselt alle Funktionen die zum Erstellen und Prüfen der Integritätsdateien benötigt werden. Bei den Integritätsdateien handelt es sich zum einen um eine Datei, welche die Dateireihenfolge des Nutzungspakets dokumentiert, diese ist essenziell für die Prüfung. Die zweite Datei speichert alle weiteren Informationen, die für die Prüfung benötigt werden. Sie können die Bibliothek wie jede andere Java Bibliothek in ein beliebiges Build-Tool einbinden und die bereitgestellten Klassen verwenden. So könnte bspw. die Komponente, die Ihre Nutzungspakete erzeugt so erweitert werden, dass die Integritätsdateien vor dem Export direkt in das Nutzungspaket integriert werden. Wie Sie die Bibliothek in Kommandozeilen-Anwendungen oder grafischen Benutzeroberflächen verwenden, können Sie den anderen Komponenten entnehmen.
 
 ### Kommandozeilen-Anwendung
 
@@ -64,11 +64,11 @@ Die grafische Benutzeroberfläche dient ausschließlich dem Testen der Integrit�
 
 #### Logo
 
-Sie können das Logo im Kopf der Anwendung durch ihr eigenes austauschen ohne den Quellcode dafür zu verändern. Sie müssen dafür nur die Datei unter [gui\src\main\resources\logo.png](gui\src\main\resources\logo.png) durch ihr Logo austauschen und das Projekt neu Kompilieren. Die Anwendung skaliert Ihr Logo so das eine Auflösung von 600px x 100px bestmöglich ausgefüllt wird. Dabei wird das Seitenverhältnis des Bildes nicht verändert. Die besten Ergebnisse werden Sie aber erzielen, wenn Sie das Logo selbst so anpassen, dass es die vorgegebene Größe einhält.
+Sie können das Logo im Kopf der Anwendung durch ihr eigenes austauschen ohne den Quellcode dafür zu verändern. Sie müssen dafür nur die Datei unter [gui/src/main/resources/logo.png](gui/src/main/resources/logo.png) durch ihr Logo austauschen und das Projekt neu kompilieren. Die Anwendung skaliert Ihr Logo so das eine Auflösung von 600px x 100px bestmöglich ausgefüllt wird. Dabei wird das Seitenverhältnis des Bildes nicht verändert. Die besten Ergebnisse werden Sie aber erzielen, wenn Sie das Logo selbst so anpassen, dass es die vorgegebene Größe einhält.
 
 #### Icon
 
-Sie können das Icon im Kopf der Anwendung durch ihr eigenes austauschen ohne den Quellcode dafür zu verändern. Sie müssen dafür nur die Datei unter [gui\src\main\resources\icon.png](gui\src\main\resources\icon.png) durch ihr eigenes Icon austauschen und das Projekt neu Kompilieren. Das Icon sollte eine Auflösung von 64px x 64px haben.
+Sie können das Icon im Kopf der Anwendung durch ihr eigenes austauschen ohne den Quellcode dafür zu verändern. Sie müssen dafür nur die Datei unter [gui/src/main/resources/icon.png](gui/src/main/resources/icon.png) durch ihr eigenes Icon austauschen und das Projekt neu kompilieren. Das Icon sollte eine Auflösung von 64px x 64px haben.
 
 <!------------------------------------------------------------------------------------------------->
 <div class="page-break" />
@@ -78,9 +78,9 @@ Sie können das Icon im Kopf der Anwendung durch ihr eigenes austauschen ohne de
 
 __Erfolgreiche Integritätsprüfung__
 
-![gui-succes](img/screenshot/gui_success.png "erfolgreichen Integritätsprüfung")
-
 Bei einer erfolgreichen Integritätsprüfung wird eine entsprechende Erfolgsmeldung ausgegeben.
+<br/><br/>
+![gui-succes](img/screenshot/gui_success.png "erfolgreichen Integritätsprüfung")
 
 <!------------------------------------------------------------------------------------------------->
 <div class="page-break" />
@@ -88,11 +88,11 @@ Bei einer erfolgreichen Integritätsprüfung wird eine entsprechende Erfolgsmeld
 
 __Primärdateien wurden verändert__
 
-![gui-hash-tree-fail](img/screenshot/gui_hash_tree_fail.png "fehlgeschlagene Integritätsprüfung")
-
 Bei einer negativen Integritätsprüfung wird eine entsprechende Fehlermeldung ausgegeben.
 
 Wenn der volle Hashbaum gespeichert wurde, können die Dateien, die sich seit der Generierung der Integritätsinformationen verändert haben, aufgelistet werden.
+
+![gui-hash-tree-fail](img/screenshot/gui_hash_tree_fail.png "fehlgeschlagene Integritätsprüfung")
 
 <!------------------------------------------------------------------------------------------------->
 <div class="page-break" />
@@ -100,9 +100,9 @@ Wenn der volle Hashbaum gespeichert wurde, können die Dateien, die sich seit de
 
 __Warnung vor zusätzlichen Primärdateien im Nutzungspaket__
 
-![gui-warning](img/screenshot/gui_warning_additional_files.png "Warnung vor zusätzlichen Dateien")
-
 Wenn Dateien im Verzeichnis des Nutzungspakets enthalten sind, die nicht bei der Erstellung der Integritätsinformation vorhanden waren, wird eine entsprechende Warnung ausgegeben, welche die zusätzlichen Dateien auflistet. Die Dateiliste wird abgekürzt, wenn diese auf Grund von fehlendem Platz nicht dargestellt werden kann.
+
+![gui-warning](img/screenshot/gui_warning_additional_files.png "Warnung vor zusätzlichen Dateien")
 
 <!------------------------------------------------------------------------------------------------->
 <div class="page-break" />
@@ -110,9 +110,9 @@ Wenn Dateien im Verzeichnis des Nutzungspakets enthalten sind, die nicht bei der
 
 __Fehler bei fehlenden Primärdateien__
 
-![gui-error-missing-file](img/screenshot/gui_missing_file.png "Fehler wegen fehlender Primärdatei")
-
 Wenn im Nutzungspaket Primärdateien fehlen, kann die Integrität nicht weiter geprüft werden und es wird eine entsprechende Fehlermeldung ausgegeben.
+
+![gui-error-missing-file](img/screenshot/gui_missing_file.png "Fehler wegen fehlender Primärdatei")
 
 <!------------------------------------------------------------------------------------------------->
 <div class="page-break" />
@@ -120,9 +120,9 @@ Wenn im Nutzungspaket Primärdateien fehlen, kann die Integrität nicht weiter g
 
 __Fehler bei fehlenden Integritätsdateien__
 
-![gui-error-missing-integrity-file](img/screenshot/gui_missing_integrity_file.png "Fehler wegen fehlender Integritätsdateien")
-
 Wenn im Nutzungspaket Integritätsdateien fehlen, kann die Integrität nicht weiter geprüft werden und es wird eine entsprechende Fehlermeldung ausgegeben.
+
+![gui-error-missing-integrity-file](img/screenshot/gui_missing_integrity_file.png "Fehler wegen fehlender Integritätsdateien")
 
 <!------------------------------------------------------------------------------------------------->
 <div class="page-break" />
@@ -130,9 +130,9 @@ Wenn im Nutzungspaket Integritätsdateien fehlen, kann die Integrität nicht wei
 
 __Fehler bei fehlerhafter Prüfsumme von Integritätsdateien__
 
-![gui-error-checksum-integrity-file](img/screenshot/gui_integrity_file_checksum_fail.png "Fehler wegen falscher Prüfsumme von Integritätsdateien")
-
 Wenn die Prüfsumme von einer Integritätsdateien falsch ist, kann die Integrität nicht weiter geprüft werden und es wird eine entsprechende Fehlermeldung ausgegeben. Durch die Prüfsumme sind die Integritätsdateien vor unbeabsichtigter Veränderung geschützt.
+
+![gui-error-checksum-integrity-file](img/screenshot/gui_integrity_file_checksum_fail.png "Fehler wegen falscher Prüfsumme von Integritätsdateien")
 
 <!------------------------------------------------------------------------------------------------->
 <div class="page-break" />
@@ -140,6 +140,6 @@ Wenn die Prüfsumme von einer Integritätsdateien falsch ist, kann die Integrit�
 
 __Fehler bei fehlerhaften Schema von Integritätsdateien__
 
-![gui-error-schema-integrity-file](img/screenshot/gui_integrity_file_schema_fail.png "Fehler wegen falschem Schema von Integritätsdateien")
-
 Wenn das erwartete Schema von einer Integritätsdateien nicht erfüllt wird, kann die Integrität nicht weiter geprüft werden und es wird eine entsprechende Fehlermeldung ausgegeben.
+
+![gui-error-schema-integrity-file](img/screenshot/gui_integrity_file_schema_fail.png "Fehler wegen falschem Schema von Integritätsdateien")
