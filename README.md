@@ -79,7 +79,7 @@ Sie können das Icon im Kopf der Anwendung durch ihr eigenes austauschen ohne de
 __Erfolgreiche Integritätsprüfung__
 
 Bei einer erfolgreichen Integritätsprüfung wird eine entsprechende Erfolgsmeldung ausgegeben.
-<br/><br/>
+
 ![gui-succes](img/screenshot/gui_success.png "erfolgreichen Integritätsprüfung")
 
 <!------------------------------------------------------------------------------------------------->
