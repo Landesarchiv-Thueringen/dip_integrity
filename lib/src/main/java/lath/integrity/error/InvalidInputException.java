@@ -1,6 +1,6 @@
 /**
  * DIP Integrity Library for generation and validation of integrity information of DIP
- * Copyright (C) 2021 Christof Bräutigam (christof.braeutigam@cbraeutigam.de)
+ * Copyright (C) 2015 Christof Bräutigam (christof.braeutigam@cbraeutigam.de)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
