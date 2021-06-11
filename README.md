@@ -70,76 +70,48 @@ Sie können das Logo im Kopf der Anwendung durch ihr eigenes austauschen ohne de
 
 Sie können das Icon im Kopf der Anwendung durch ihr eigenes austauschen ohne den Quellcode dafür zu verändern. Sie müssen dafür nur die Datei unter [gui/src/main/resources/icon.png](gui/src/main/resources/icon.png) durch ihr eigenes Icon austauschen und das Projekt neu kompilieren. Das Icon sollte eine Auflösung von 64px x 64px haben.
 
-<!------------------------------------------------------------------------------------------------->
-<div class="page-break" />
-<!------------------------------------------------------------------------------------------------->
-
 #### Nutzungsszenarien
 
-__Erfolgreiche Integritätsprüfung__
+##### Erfolgreiche Integritätsprüfung
 
-Bei einer erfolgreichen Integritätsprüfung wird eine entsprechende Erfolgsmeldung ausgegeben.
+Bei einer erfolgreichen Integritätsprüfung wird eine entsprechende Erfolgsmeldung ausgegeben.  
 
 ![gui-succes](img/screenshot/gui_success.png "erfolgreichen Integritätsprüfung")
 
-<!------------------------------------------------------------------------------------------------->
-<div class="page-break" />
-<!------------------------------------------------------------------------------------------------->
-
-__Primärdateien wurden verändert__
+##### Primärdateien wurden verändert
 
 Bei einer negativen Integritätsprüfung wird eine entsprechende Fehlermeldung ausgegeben.
 
-Wenn der volle Hash-Baum gespeichert wurde, können die Dateien, die sich seit der Generierung der Integritätsinformationen verändert haben, aufgelistet werden.
+Wenn der volle Hash-Baum gespeichert wurde, können die Dateien, die sich seit der Generierung der Integritätsinformationen verändert haben, aufgelistet werden.  
 
 ![gui-hash-tree-fail](img/screenshot/gui_hash_tree_fail.png "fehlgeschlagene Integritätsprüfung")
 
-<!------------------------------------------------------------------------------------------------->
-<div class="page-break" />
-<!------------------------------------------------------------------------------------------------->
+##### Warnung vor zusätzlichen Primärdateien im Nutzungspaket
 
-__Warnung vor zusätzlichen Primärdateien im Nutzungspaket__
-
-Wenn Dateien im Verzeichnis des Nutzungspakets enthalten sind, die nicht bei der Erstellung der Integritätsinformation vorhanden waren, wird eine entsprechende Warnung ausgegeben, welche die zusätzlichen Dateien auflistet. Die Dateiliste wird abgekürzt, wenn diese auf Grund von fehlendem Platz nicht dargestellt werden kann.
+Wenn Dateien im Verzeichnis des Nutzungspakets enthalten sind, die nicht bei der Erstellung der Integritätsinformation vorhanden waren, wird eine entsprechende Warnung ausgegeben, welche die zusätzlichen Dateien auflistet. Die Dateiliste wird abgekürzt, wenn diese auf Grund von fehlendem Platz nicht dargestellt werden kann.  
 
 ![gui-warning](img/screenshot/gui_warning_additional_files.png "Warnung vor zusätzlichen Dateien")
 
-<!------------------------------------------------------------------------------------------------->
-<div class="page-break" />
-<!------------------------------------------------------------------------------------------------->
+##### Fehler bei fehlenden Primärdateien
 
-__Fehler bei fehlenden Primärdateien__
-
-Wenn im Nutzungspaket Primärdateien fehlen, kann die Integrität nicht weiter geprüft werden und es wird eine entsprechende Fehlermeldung ausgegeben.
+Wenn im Nutzungspaket Primärdateien fehlen, kann die Integrität nicht weiter geprüft werden und es wird eine entsprechende Fehlermeldung ausgegeben.  
 
 ![gui-error-missing-file](img/screenshot/gui_missing_file.png "Fehler wegen fehlender Primärdatei")
 
-<!------------------------------------------------------------------------------------------------->
-<div class="page-break" />
-<!------------------------------------------------------------------------------------------------->
+##### Fehler bei fehlenden Integritätsdateien
 
-__Fehler bei fehlenden Integritätsdateien__
-
-Wenn im Nutzungspaket Integritätsdateien fehlen, kann die Integrität nicht weiter geprüft werden und es wird eine entsprechende Fehlermeldung ausgegeben.
+Wenn im Nutzungspaket Integritätsdateien fehlen, kann die Integrität nicht weiter geprüft werden und es wird eine entsprechende Fehlermeldung ausgegeben.  
 
 ![gui-error-missing-integrity-file](img/screenshot/gui_missing_integrity_file.png "Fehler wegen fehlender Integritätsdateien")
 
-<!------------------------------------------------------------------------------------------------->
-<div class="page-break" />
-<!------------------------------------------------------------------------------------------------->
+##### Fehler bei fehlerhafter Prüfsumme von Integritätsdateien
 
-__Fehler bei fehlerhafter Prüfsumme von Integritätsdateien__
-
-Wenn die Prüfsumme von einer Integritätsdateien falsch ist, kann die Integrität nicht weiter geprüft werden und es wird eine entsprechende Fehlermeldung ausgegeben. Durch die Prüfsumme sind die Integritätsdateien vor unbeabsichtigter Veränderung geschützt.
+Wenn die Prüfsumme von einer Integritätsdateien falsch ist, kann die Integrität nicht weiter geprüft werden und es wird eine entsprechende Fehlermeldung ausgegeben. Durch die Prüfsumme sind die Integritätsdateien vor unbeabsichtigter Veränderung geschützt.  
 
 ![gui-error-checksum-integrity-file](img/screenshot/gui_integrity_file_checksum_fail.png "Fehler wegen falscher Prüfsumme von Integritätsdateien")
 
-<!------------------------------------------------------------------------------------------------->
-<div class="page-break" />
-<!------------------------------------------------------------------------------------------------->
+##### Fehler bei fehlerhaften Schema von Integritätsdateien
 
-__Fehler bei fehlerhaften Schema von Integritätsdateien__
-
-Wenn das erwartete Schema von einer Integritätsdateien nicht erfüllt wird, kann die Integrität nicht weiter geprüft werden und es wird eine entsprechende Fehlermeldung ausgegeben.
+Wenn das erwartete Schema von einer Integritätsdateien nicht erfüllt wird, kann die Integrität nicht weiter geprüft werden und es wird eine entsprechende Fehlermeldung ausgegeben.  
 
 ![gui-error-schema-integrity-file](img/screenshot/gui_integrity_file_schema_fail.png "Fehler wegen falschem Schema von Integritätsdateien")
