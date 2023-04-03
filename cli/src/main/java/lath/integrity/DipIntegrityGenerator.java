@@ -314,7 +314,8 @@ public class DipIntegrityGenerator {
   }
 
   private static Path getDipDir(final String commandLineValue) {
-    final Path dipDir = Paths.get(System.getProperty("user.dir"), commandLineValue);
+    String pathValue = commandLineValue.replaceFirst("^~", System.getProperty("user.home"));
+    final Path dipDir = Paths.get(pathValue).toAbsolutePath();
     if (!Files.isDirectory(dipDir)) {
       System.out.println("Der Pfad f\u00fcr das Nutzungspaket \"" + dipDir + "\" ist kein Ordner.");
       System.exit(1);
