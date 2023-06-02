@@ -10,3 +10,6 @@
 .label {
   -fx-padding : 0 2em 0 2em;
 }
+.message-vbox {
+  -fx-background-color: white;
+}
