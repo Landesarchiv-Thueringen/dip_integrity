@@ -36,6 +36,7 @@ import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.ScrollPane;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -80,16 +81,21 @@ public class DipIntegrityValidator extends Application {
   private final Region controlSpacer = new Region();
   private final Region bottomSpacer = new Region();
   private final HBox controlLayout = new HBox(chooseDipButton);
-  private final VBox rootLayout = new VBox(
-    logoLayout,
-    logoContentSpacer,
-    taskListView,
+
+  private final VBox messageLayout = new VBox(
     errorMessageLabel,
     errorMessageAdditionalInfoLabel,
     successMessageLabel,
     warningMessageSpacer,
     warningMessageLabel,
-    warningMessageAdditionalInfoLabel,
+    warningMessageAdditionalInfoLabel
+  );
+  private final ScrollPane messageScrollPane = new ScrollPane();
+  private final VBox rootLayout = new VBox(
+    logoLayout,
+    logoContentSpacer,
+    taskListView,
+    messageScrollPane,
     controlSpacer,
     controlLayout,
     bottomSpacer
@@ -134,6 +140,8 @@ public class DipIntegrityValidator extends Application {
     warningMessageSpacer.setPrefHeight(20);
     controlSpacer.setPrefHeight(50);
     bottomSpacer.setPrefHeight(30);
+    messageScrollPane.setContent(messageLayout);
+    messageScrollPane.setMaxHeight(260);
   }
 
   private void initControls(final Stage primaryStage) {

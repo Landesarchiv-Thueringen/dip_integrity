@@ -1,5 +1,9 @@
 # Ignore Gradle project-specific cache directory
 .gradle
 
+# Ignore gradle properties file with proxy configuration
+gradle.properties
+
 # Ignore Gradle build output directory
 build
+
