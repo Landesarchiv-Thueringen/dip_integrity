@@ -13,7 +13,7 @@ dependencies {
 
 jar {
   archiveBaseName  = 'dip_integrity_lib'
-  archiveVersion  = '1.0'
+  archiveVersion  = '1.0.0'
 }
 
 task copyJarToProjectRoot(type: Copy) {

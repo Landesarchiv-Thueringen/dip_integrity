@@ -27,7 +27,7 @@ application {
 shadowJar {
   mainClassName = 'lath.integrity.App'
   archiveBaseName  = 'dip_integrity_gui'
-  archiveVersion  = '1.0'
+  archiveVersion  = '1.0.0'
 }
 
 tasks.withType(JavaCompile) {
