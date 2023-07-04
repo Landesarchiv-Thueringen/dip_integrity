@@ -14,7 +14,7 @@ Für den Nachweis, dass ein Nutzungspaket nicht durch Dritte verändert wurde, i
 
 ### Nachnutzung
 
-Alle bereitgestellten Komponenten können kostenfrei nachgenutzt werden, die genauen Bedingungen können Sie in der [Lizenzvereinbarung](./LICENSE) nachlesen. Die aktuellen JAR-Dateien für alle Komponenten finden Sie immer im [JAR-Ordner](./jar). Diese können Sie auch direkt verwenden.
+Alle bereitgestellten Komponenten können kostenfrei nachgenutzt werden, die genauen Bedingungen können Sie in der [Lizenzvereinbarung](./LICENSE) nachlesen. Die aktuellen JAR-Dateien für alle bereitgestellten Komponenten werden immer mit dem entsprechendem [Release](https://github.com/Landesarchiv-Thueringen/dip_integrity/releases/latest) veröffentlicht. Diese können Sie auch direkt verwenden.
 
 #### Voraussetzungen
 
