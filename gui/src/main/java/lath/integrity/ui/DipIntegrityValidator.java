@@ -41,7 +41,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -80,21 +79,17 @@ public class DipIntegrityValidator extends Application {
   private final Region warningMessageSpacer = new Region();
   private final Region controlSpacer = new Region();
   private final Region bottomSpacer = new Region();
-  private final VBox messageVBox = new VBox(
-    errorMessageLabel,
-    errorMessageAdditionalInfoLabel,
-    successMessageLabel,
-    warningMessageSpacer,
-    warningMessageLabel,
-    warningMessageAdditionalInfoLabel
-  );
-  private final ScrollPane messageScrollPane = new ScrollPane(messageVBox);
   private final HBox controlLayout = new HBox(chooseDipButton);
   private final VBox rootLayout = new VBox(
     logoLayout,
     logoContentSpacer,
     taskListView,
-    messageScrollPane,
+    errorMessageLabel,
+    errorMessageAdditionalInfoLabel,
+    successMessageLabel,
+    warningMessageSpacer,
+    warningMessageLabel,
+    warningMessageAdditionalInfoLabel,
     controlSpacer,
     controlLayout,
     bottomSpacer
@@ -120,7 +115,9 @@ public class DipIntegrityValidator extends Application {
     initLayout();
     initControls(primaryStage);
     initTaskListView();
-    initMessageBox();
+    initSuccessMessage();
+    initErrorMessage();
+    initWarningMessage();
     primaryStage.show();
   }
 
@@ -170,15 +167,6 @@ public class DipIntegrityValidator extends Application {
     taskList.add(new Task("1. Bitte w\u00e4hlen Sie das zu pr\u00fcfende Nutzungspaket aus."));
   }
 
-  private void initMessageBox() {
-    messageVBox.getStyleClass().add("message-vbox");
-    messageScrollPane.setVisible(false);
-    messageScrollPane.setFitToWidth(true);
-    initSuccessMessage();
-    initWarningMessage();
-    initErrorMessage();
-  }
-
   private void initSuccessMessage() {
     hideSuccessMessage();
     successMessageLabel.setTextFill(Color.web("#2E8B57"));
@@ -190,13 +178,11 @@ public class DipIntegrityValidator extends Application {
     successMessageLabel.setText(successMessage);
     successMessageLabel.setVisible(true);
     successMessageLabel.setManaged(true);
-    messageScrollPane.setVisible(true);
   }
 
   private void hideSuccessMessage() {
     successMessageLabel.setVisible(false);
     successMessageLabel.setManaged(false);
-    messageScrollPane.setVisible(false);
   }
 
   private void initErrorMessage() {
@@ -213,7 +199,6 @@ public class DipIntegrityValidator extends Application {
     errorMessageLabel.setManaged(true);
     errorMessageAdditionalInfoLabel.setVisible(false);
     errorMessageAdditionalInfoLabel.setManaged(false);
-    messageScrollPane.setVisible(true);
   }
 
   private void showErrorMessage(final String errorMessage, final String additionalInfo) {
@@ -223,7 +208,6 @@ public class DipIntegrityValidator extends Application {
     errorMessageAdditionalInfoLabel.setText(additionalInfo);
     errorMessageAdditionalInfoLabel.setVisible(true);
     errorMessageAdditionalInfoLabel.setManaged(true);
-    messageScrollPane.setVisible(true);
   }
 
   private void hideErrorMessage() {
@@ -231,7 +215,6 @@ public class DipIntegrityValidator extends Application {
     errorMessageLabel.setManaged(false);
     errorMessageAdditionalInfoLabel.setVisible(false);
     errorMessageAdditionalInfoLabel.setManaged(false);
-    messageScrollPane.setVisible(false);
   }
 
   private void initWarningMessage() {
@@ -250,7 +233,6 @@ public class DipIntegrityValidator extends Application {
     warningMessageAdditionalInfoLabel.setManaged(false);
     warningMessageSpacer.setManaged(true);
     warningMessageSpacer.setVisible(true);
-    messageScrollPane.setVisible(true);
   }
 
   private void showWarningMessage(final String warningMessage, final String additionalInfo) {
@@ -262,7 +244,6 @@ public class DipIntegrityValidator extends Application {
     warningMessageAdditionalInfoLabel.setManaged(true);
     warningMessageSpacer.setManaged(true);
     warningMessageSpacer.setVisible(true);
-    messageScrollPane.setVisible(true);
   }
 
   private void hideWarningMessage() {
@@ -272,7 +253,6 @@ public class DipIntegrityValidator extends Application {
     warningMessageAdditionalInfoLabel.setManaged(false);
     warningMessageSpacer.setManaged(false);
     warningMessageSpacer.setVisible(false);
-    messageScrollPane.setVisible(false);
   }
 
   private File selectDipDir(final Stage primaryStage) {
